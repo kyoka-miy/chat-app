@@ -14,7 +14,8 @@
 /coverage
 
 # next.js
-/.next/
+/.next
+frontend/.next/
 /out/
 
 # production
@@ -39,3 +40,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Node modules
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+
+frontend/public/
+public/
