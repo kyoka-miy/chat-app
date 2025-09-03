@@ -3,7 +3,7 @@ import { autoInjectable } from "tsyringe";
 import { catchAsync } from "../../middlewares/catchAsync";
 import { ValidObjectId } from "../../validators/validObjectId";
 import { ObjectId } from "mongodb";
-import { GetMessagesUseCase } from "../../usecase/message/GetMessagesUseCase";
+import { GetMessagesUseCase } from "../../usecase/message/getMessagesUseCase";
 
 @autoInjectable()
 export class MessageController {

@@ -18,6 +18,10 @@ const accountSchema = new mongoose.Schema({
     unique: true,
     validate: [validator.isEmail, "Please provide a valid email"],
   },
+  createdAt: {
+    type: Date,
+    default: new Date(),
+  },
   chatRooms: [
     {
       type: mongoose.Schema.Types.ObjectId,

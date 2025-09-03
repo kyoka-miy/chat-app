@@ -3,7 +3,7 @@ import { container } from "tsyringe";
 import { AddMessageUseCase } from "../../usecase/message/addMessageUseCase";
 import { ObjectId } from "mongodb";
 import { formatMessage } from "../../middlewares/messages";
-import { GetMessagesUseCase } from "../../usecase/message/GetMessagesUseCase";
+import { GetMessagesUseCase } from "../../usecase/message/getMessagesUseCase";
 
 const botName = "ChatBot";
 
