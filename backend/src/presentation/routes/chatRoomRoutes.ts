@@ -7,6 +7,7 @@ import {
   GetChatRoomsDto,
 } from "../controller/chatRoomController";
 import { validateDto } from "../../middlewares/validateDto";
+import { authenticateIdToken } from "../../middlewares/authenticateIdToken";
 
 const chatRoomRouter = express.Router();
 
@@ -14,16 +15,19 @@ const chatRoomController = new ChatRoomController();
 
 chatRoomRouter.get(
   "/",
+  authenticateIdToken,
   validateDto(GetChatRoomsDto),
   chatRoomController.getChatRooms
 );
 chatRoomRouter.post(
   "/",
+  authenticateIdToken,
   validateDto(AddChatRoomDto),
   chatRoomController.addChatRoom
 );
 chatRoomRouter.delete(
   "/:chatRoomId",
+  authenticateIdToken,
   validateDto(DeleteChatRoomDto),
   chatRoomController.deleteChatRoom
 );

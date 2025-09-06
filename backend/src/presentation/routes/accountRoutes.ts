@@ -7,6 +7,6 @@ const accountRouter = express.Router();
 
 const accountController = new AccountController();
 
-accountRouter.get("/", accountController.getAccounts);
+accountRouter.get("/", authenticateIdToken, accountController.getAccounts);
 
 export default accountRouter;

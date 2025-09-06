@@ -2,18 +2,22 @@
 import { auth } from "../../utils/firebase";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
-const LoginPage = () => {
+const SignUpPage = () => {
   const router = useRouter();
 
-  const handleGoogleLogin = async () => {
+  const handleGoogleSignUp = async () => {
     const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({
+      prompt: "select_account",
+    });
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       const idToken = await user.getIdToken();
 
-      const response = await fetch("http://localhost:3000/auth/login", {
+      const response = await fetch("http://localhost:3000/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -27,7 +31,7 @@ const LoginPage = () => {
         console.error("Authentication failed");
       }
     } catch (error) {
-      console.error("Failed to login with Google:", error);
+      console.error("Failed to sign up with Google:", error);
     }
   };
 
@@ -35,23 +39,23 @@ const LoginPage = () => {
     <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="bg-white dark:bg-gray-800 p-8 rounded shadow-md w-full max-w-md">
         <h1 className="text-2xl font-bold mb-6 text-center text-gray-900 dark:text-white">
-          Login
+          Sign Up
         </h1>
         <button
-          onClick={handleGoogleLogin}
-          className="w-full py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded transition-colors cursor-pointer mb-4"
+          onClick={handleGoogleSignUp}
+          className="w-full py-2 px-4 bg-green-500 hover:bg-green-600 text-white font-semibold rounded transition-colors cursor-pointer mb-4"
         >
-          Login with Google
+          Sign up with Google
         </button>
         <p className="text-center text-gray-600 dark:text-gray-300 text-sm">
-          Don't have an account?{" "}
-          <a href="/signup" className="text-blue-500 hover:underline">
-            Sign up
-          </a>
+          Already have an account?{" "}
+          <Link href="/login" className="text-blue-500 hover:underline">
+            Login
+          </Link>
         </p>
       </div>
     </div>
   );
 };
 
-export default LoginPage;
+export default SignUpPage;

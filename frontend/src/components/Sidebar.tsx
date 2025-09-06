@@ -60,13 +60,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 currentRoomId === room._id
                   ? "bg-blue-500 text-white"
                   : "hover:bg-blue-100 dark:hover:bg-blue-700"
-              }`}
+              } hover:cursor-pointer`}
               onClick={() => onSelectRoom(room._id)}
             >
               {room.name}
             </button>
             <button
-              className="ml-2 text-gray-400 hover:text-red-600 p-1 rounded transition-colors"
+              className="ml-2 text-gray-400 hover:text-red-600 p-1 rounded transition-colors hover:cursor-pointer"
               title="Delete room"
               onClick={() => handleDeleteClick(room._id, room.name)}
             >
@@ -85,13 +85,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </p>
             <div className="flex justify-end gap-2">
               <button
-                className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
+                className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 cursor-pointer"
                 onClick={handleCancel}
               >
                 Cancel
               </button>
               <button
-                className="px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600"
+                className="px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600 cursor-pointer"
                 onClick={handleConfirmDelete}
               >
                 Delete

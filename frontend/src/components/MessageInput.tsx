@@ -36,7 +36,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
         onKeyDown={(e) => e.key === "Enter" && handleSend()}
       />
       <button
-        className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 text-sm"
+        className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 text-sm cursor-pointer"
         onClick={handleSend}
       >
         Send

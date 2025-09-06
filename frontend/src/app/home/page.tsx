@@ -7,6 +7,7 @@ import { getSocket } from "../../utils/socket";
 import { getChatRooms } from "../../utils/api";
 import { auth } from "@/utils/firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
+import { signOut } from "firebase/auth";
 
 export default function Home() {
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
@@ -72,28 +73,35 @@ export default function Home() {
     });
   };
 
+  const logout = async () => {
+    await signOut(auth);
+    setUser(null);
+    setAccountId("");
+    window.location.href = "/login";
+  };
+
   // Firebase認証トークン検証
-  useEffect(() => {
-    if (!user) return;
-    user.getIdToken().then((token) => {
-      fetch("http://localhost:3000/auth/verify-token", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.user) {
-            console.log("認証OK:", data.user);
-          } else {
-            console.error("認証失敗", data);
-          }
-        })
-        .catch((err) => console.error("認証エラー", err));
-    });
-  }, [user]);
+  // useEffect(() => {
+  //   if (!user) return;
+  //   user.getIdToken().then((token) => {
+  //     fetch("http://localhost:3000/auth/verify-token", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     })
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //         if (data.user) {
+  //           console.log("認証OK:", data.user);
+  //         } else {
+  //           console.error("認証失敗", data);
+  //         }
+  //       })
+  //       .catch((err) => console.error("認証エラー", err));
+  //   });
+  // }, [user]);
 
   return (
     <div className="flex h-screen">
@@ -104,23 +112,16 @@ export default function Home() {
       />
       <div className="flex flex-col flex-1">
         <div className="flex justify-between items-center p-4 border-b">
-          {user ? (
+          {user && (
             <>
               <span>Welcome, {user.displayName || user.email}</span>
               <button
-                // onClick={logout}
-                className="ml-4 px-3 py-1 bg-gray-200 rounded"
+                onClick={logout}
+                className="ml-4 px-3 py-1 bg-gray-400 rounded hover:cursor-pointer"
               >
                 Logout
               </button>
             </>
-          ) : (
-            <button
-              // onClick={loginWithGoogle}
-              className="px-3 py-1 bg-blue-500 text-white rounded"
-            >
-              Sign in with Google
-            </button>
           )}
         </div>
         <header className="p-4 border-b bg-gray-50 dark:bg-gray-900">

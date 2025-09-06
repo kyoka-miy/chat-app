@@ -5,6 +5,7 @@ const authRouter = express.Router();
 
 const authController = new AuthController();
 
-authRouter.post("/verify-token", authController.verifyToken);
+authRouter.post("/login", authController.login);
+authRouter.post("/signup", authController.signup);
 
 export default authRouter;
