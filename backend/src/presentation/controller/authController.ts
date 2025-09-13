@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { catchAsync } from "../../middlewares/catchAsync";
 import { Account } from "../../domain/model/accountModel";
 import { firebaseAdmin } from "../../firebaseAdmin";
-import { asyncLocalStorage } from "../../utils/asyncLocalStorage";
 
 export class AuthController {
   login = catchAsync(async (req: Request, res: Response) => {
@@ -16,11 +15,18 @@ export class AuthController {
     if (!idToken) {
       return res.status(400).send("No ID token provided.");
     }
+    // Set idToken in httpOnly cookie
+    res.cookie("idToken", idToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
+    });
 
     try {
       const decodedToken = await firebaseAdmin.auth().verifyIdToken(idToken);
       const { email } = decodedToken;
-
+    console.log("Decoded Token:", decodedToken);
       let account = await Account.findOne({ email });
 
       if (!account) {
@@ -29,11 +35,11 @@ export class AuthController {
           .json({ error: "Account not found. Please sign up first." });
       }
 
-      asyncLocalStorage.run({ account }, () => {
-        res
-          .status(200)
-          .json({ message: "Authentication success", user: account });
-      });
+      // Store account info in session
+      req.session.account = account;
+      res
+        .status(200)
+        .json({ message: "Authentication success", account: account });
     } catch (error) {
       console.error("Failed to authenticate token:", error);
       res.status(401).send("Failed to verify ID token.");
@@ -68,9 +74,9 @@ export class AuthController {
       });
       await account.save();
       console.log("Registered a new account:", email);
-      asyncLocalStorage.run({ account }, () => {
-        res.status(201).json({ message: "Account created", user: account });
-      });
+      // Store account info in session
+      req.session.account = account;
+      res.status(201).json({ message: "Account created", account: account });
     } catch (error) {
       console.error("Failed to sign up:", error);
       res.status(401).send("Failed to verify ID token.");

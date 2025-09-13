@@ -19,6 +19,7 @@ const LoginPage = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${idToken}`,
         },
+        credentials: "include", // Include cookies in the request
       });
 
       if (response.ok) {

@@ -80,29 +80,6 @@ export default function Home() {
     window.location.href = "/login";
   };
 
-  // Firebase認証トークン検証
-  // useEffect(() => {
-  //   if (!user) return;
-  //   user.getIdToken().then((token) => {
-  //     fetch("http://localhost:3000/auth/verify-token", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     })
-  //       .then((res) => res.json())
-  //       .then((data) => {
-  //         if (data.user) {
-  //           console.log("認証OK:", data.user);
-  //         } else {
-  //           console.error("認証失敗", data);
-  //         }
-  //       })
-  //       .catch((err) => console.error("認証エラー", err));
-  //   });
-  // }, [user]);
-
   return (
     <div className="flex h-screen">
       <Sidebar

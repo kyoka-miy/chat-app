@@ -6,6 +6,13 @@ import { setupSocket } from "./src/presentation/socket/socket";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import app from "./src/app";
+import { setupSession } from "./src/config/session";
+import accountRouter from "./src/presentation/routes/accountRoutes";
+import chatRoomRouter from "./src/presentation/routes/chatRoomRoutes";
+import messageRouter from "./src/presentation/routes/messageRoutes";
+import authRouter from "./src/presentation/routes/authRoutes";
+import { errorHandler } from "./src/middlewares/errorHandler";
+import { AppError } from "./src/utils/appError";
 
 const server = http.createServer(app);
 const io = new SocketIOServer(server, {
@@ -27,9 +34,23 @@ const DB = process.env.DATABASE.replace(
   process.env.DATABASE_PASSWORD as string
 );
 
-mongoose.connect(DB).then(() => console.log("DB connection successful!"));
+mongoose.connect(DB).then(() => {
+  console.log("DB connection successful!");
+  setupSession(app); // Initialize session after DB connection
 
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-  console.log(`Server is running at http://localhost:${PORT}`);
+  // Register routes after session middleware
+  app.use("/accounts", accountRouter);
+  app.use("/chat-rooms", chatRoomRouter);
+  app.use("/messages", messageRouter);
+  app.use("/auth", authRouter);
+
+  app.use((req, res, next) => {
+    next(new AppError(`Route ${req.originalUrl} not found`, 404));
+  });
+  app.use(errorHandler);
+
+  const PORT = process.env.PORT || 3000;
+  server.listen(PORT, () => {
+    console.log(`Server is running at http://localhost:${PORT}`);
+  });
 });
