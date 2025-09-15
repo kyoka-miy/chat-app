@@ -11,26 +11,26 @@ import { DeleteChatRoomUseCase } from "../../usecase/chat-room/deleteChatRoomUse
 @autoInjectable()
 export class ChatRoomController {
   constructor(
-    private getChatRoomsUseCase?: GetChatRoomsUseCase,
-    private addChatRoomsUseCase?: AddChatRoomUseCase,
-    private deleteChatRoomUseCase?: DeleteChatRoomUseCase
+    private getChatRoomsUseCase: GetChatRoomsUseCase,
+    private addChatRoomsUseCase: AddChatRoomUseCase,
+    private deleteChatRoomUseCase: DeleteChatRoomUseCase
   ) {}
   // TODO: Get account id from token, page
   getChatRooms = catchAsync(async (req: Request, res: Response) => {
     const accountId = new ObjectId(req.query.accountId as string);
-    const chatRooms = await this.getChatRoomsUseCase?.execute(accountId);
+    const chatRooms = await this.getChatRoomsUseCase.execute(accountId);
     res.status(200).json(chatRooms);
   });
 
   addChatRoom = catchAsync(async (req: Request, res: Response) => {
     const { name, accountIds } = req.body;
-    await this.addChatRoomsUseCase?.execute(name, accountIds);
+    await this.addChatRoomsUseCase.execute(name, accountIds);
     res.status(201).json({ message: "Chat room created successfully" });
   });
 
   deleteChatRoom = catchAsync(async (req: Request, res: Response) => {
     const chatRoomId = new ObjectId(req.params.chatRoomId as string);
-    await this.deleteChatRoomUseCase?.execute(chatRoomId);
+    await this.deleteChatRoomUseCase.execute(chatRoomId);
     res.status(200).json({ message: "Chat room deleted successfully" });
   });
 }

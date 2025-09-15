@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import "./src/config/di-container/container";
+import "./src/config/container";
 import { Server as SocketIOServer } from "socket.io";
 import http from "http";
 import { setupSocket } from "./src/presentation/socket/socket";

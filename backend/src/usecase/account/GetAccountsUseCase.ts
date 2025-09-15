@@ -1,5 +1,5 @@
 import { injectable, inject } from "tsyringe";
-import { TOKENS } from "../../config/di-container/tokens";
+import { TOKENS } from "../../config/tokens";
 import { IAccountRepository } from "../../repository/IAccountRepository";
 
 @injectable()

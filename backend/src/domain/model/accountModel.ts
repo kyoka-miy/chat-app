@@ -4,6 +4,7 @@ import validator from "validator";
 export interface IAccount extends Document {
   name: string;
   email: string;
+  createdAt: Date;
   chatRooms: mongoose.Types.ObjectId[];
 }
 

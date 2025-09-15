@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import { TOKENS } from "../../config/di-container/tokens";
+import { TOKENS } from "../../config/tokens";
 import { IMessageRepository } from "../../repository/IMessageRepository";
 import { ObjectId } from "mongodb";
 

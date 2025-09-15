@@ -12,4 +12,13 @@ export class AccountRepository implements IAccountRepository {
   async findByIds(accountIds: ObjectId[]): Promise<IAccount[]> {
     return Account.find({ _id: { $in: accountIds } }).exec();
   }
+
+  async findByEmail(email: string): Promise<IAccount | null> {
+    return Account.findOne({ email }).exec();
+  }
+
+  async insert(account: IAccount): Promise<IAccount> {
+    const newAccount = new Account(account);
+    return newAccount.save();
+  }
 }

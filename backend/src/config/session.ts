@@ -17,7 +17,7 @@ export function setupSession(app: any) {
         httpOnly: true,
         maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
         sameSite: "lax",
-        secure: process.env.NODE_ENV === "production",
+        secure: false,
       },
     })
   );

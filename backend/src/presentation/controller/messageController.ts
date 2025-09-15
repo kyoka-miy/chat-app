@@ -7,11 +7,11 @@ import { GetMessagesUseCase } from "../../usecase/message/getMessagesUseCase";
 
 @autoInjectable()
 export class MessageController {
-  constructor(private getMessagesUsecase?: GetMessagesUseCase) {}
+  constructor(private getMessagesUsecase: GetMessagesUseCase) {}
 
   getMessages = catchAsync(async (req: Request, res: Response) => {
     const chatRoomId = new ObjectId(req.query.chatRoomId as string);
-    const messages = await this.getMessagesUsecase?.execute(chatRoomId);
+    const messages = await this.getMessagesUsecase.execute(chatRoomId);
     res.status(200).json(messages);
   });
 }

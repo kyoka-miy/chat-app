@@ -8,10 +8,11 @@ import {
 } from "../controller/chatRoomController";
 import { validateDto } from "../../middlewares/validateDto";
 import { authenticateIdToken } from "../../middlewares/authenticateIdToken";
+import { container } from "tsyringe";
 
 const chatRoomRouter = express.Router();
 
-const chatRoomController = new ChatRoomController();
+const chatRoomController = container.resolve(ChatRoomController);
 
 chatRoomRouter.get(
   "/",
