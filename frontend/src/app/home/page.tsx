@@ -13,9 +13,6 @@ export default function Home() {
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
   const [currentChatRoomId, setCurrentChatRoomId] = useState<string>("");
   const [messages, setMessages] = useState<{ [roomId: string]: Message[] }>({});
-  const [accountId, setAccountId] = useState<string>(
-    "687b5c9ab5cb3f391d1e3747"
-  );
   const [user, setUser] = useState<User | null>(null);
 
   // useEffect(() => {
@@ -65,14 +62,13 @@ export default function Home() {
     const socket = getSocket();
     socket.emit("chatMessage", {
       text,
-      chatRoomId: currentChatRoomId
+      chatRoomId: currentChatRoomId,
     });
   };
 
   const logout = async () => {
     await signOut(auth);
     setUser(null);
-    setAccountId("");
     window.location.href = "/login";
   };
 
@@ -102,10 +98,7 @@ export default function Home() {
             {chatRooms.find((r) => r._id === currentChatRoomId)?.name}
           </h1>
         </header>
-        <ChatMessages
-          messages={messages[currentChatRoomId] || []}
-          account={accountId}
-        />
+        <ChatMessages messages={messages[currentChatRoomId] || []} />
         <MessageInput onSend={handleSend} />
       </div>
     </div>

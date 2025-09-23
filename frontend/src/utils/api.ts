@@ -1,5 +1,3 @@
-// TODO: Store idToken in cookie, set it in request header
-
 export async function getChatRooms() {
   const res = await fetch(`http://localhost:3000/chat-rooms`, {
     credentials: "include", // Send cookies with request
@@ -15,4 +13,11 @@ export async function deleteChatRoom(chatRoomId: string) {
   });
   if (!res.ok) throw new Error("Failed to delete chat room");
   return res.json();
+}
+
+export async function getAccount() {
+    const res = await fetch(`http://localhost:3000/accounts/me`, {
+      credentials: "include", // Send cookies with request
+    });
+    return res.json();
 }
