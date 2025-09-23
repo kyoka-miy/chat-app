@@ -7,16 +7,12 @@ import { GetMessagesUseCase } from "../../usecase/message/getMessagesUseCase";
 
 const botName = "ChatBot";
 
-const users: { id: string; username: string; room: string }[] = [];
+const users: { id: string; accountId: ObjectId; chatRoomId: ObjectId }[] = [];
 
-function userJoin(id: string, username: string, room: string) {
-  const user = { id, username, room };
+function userJoin(id: string, accountId: ObjectId, chatRoomId: ObjectId) {
+  const user = { id, accountId, chatRoomId };
   users.push(user);
   return user;
-}
-
-function getCurrentUser(id: string) {
-  return users.find((user) => user.id === id);
 }
 
 function userLeave(id: string) {
@@ -27,48 +23,51 @@ function userLeave(id: string) {
   return null;
 }
 
-function getRoomUsers(room: string) {
-  return users.filter((user) => user.room === room);
+function getRoomUsers(chatRoomId: ObjectId) {
+  return users.filter((user) => user.chatRoomId === chatRoomId);
 }
 
 export function setupSocket(io: SocketIOServer) {
   io.on("connection", (socket) => {
-    socket.on("joinRoom", async ({ username, room }) => {
-      console.log(`User ${username} joined room ${room}`);
-      const user = userJoin(socket.id, username, room);
-      socket.join(room);
+    // Get account info from session
+    const account = socket.request.session?.account;
+    if (!account) {
+      console.log("No account in session");
+      return;
+      // throw new AppError("No account in session", 404);
+    }
 
-      // 過去メッセージ取得し、joinRoomイベントで返す
+    socket.on("joinRoom", async (chatRoomId) => {
+      console.log(`User ${account.name} joined room ${chatRoomId}`);
+      userJoin(socket.id, account._id, chatRoomId);
+      socket.join(chatRoomId);
+
+      // Get past messages and send them with joinRoom event
       try {
         const getMessagesUseCase = container.resolve(GetMessagesUseCase);
-        const messages = await getMessagesUseCase.execute(new ObjectId(room));
+        const messages = await getMessagesUseCase.execute(chatRoomId);
         socket.emit("joinRoom", { messages });
       } catch (err) {
-        socket.emit("error", { message: "メッセージ取得に失敗しました" });
+        socket.emit("error", { message: "Failed to get messages" });
       }
 
       socket.emit("message", formatMessage(botName, "Welcome to the chat!"));
       socket.broadcast
-        .to(room)
+        .to(chatRoomId)
         .emit(
           "message",
-          formatMessage(botName, `${username} has joined the chat!`)
+          formatMessage(botName, `${account.name} has joined the chat!`)
         );
     });
 
-    socket.on("chatMessage", async (data) => {
-      const { text, chatRoomId, accountId } = data;
-      if (!text || !chatRoomId || !accountId) return;
+    socket.on("chatMessage", async ({ text, chatRoomId }) => {
+      if (!text || !chatRoomId) return;
       const addMessageUseCase = container.resolve(AddMessageUseCase);
-      await addMessageUseCase.execute(
-        text,
-        new ObjectId(chatRoomId),
-        new ObjectId(accountId)
-      );
+      await addMessageUseCase.execute(text, chatRoomId, account._id);
       io.to(chatRoomId).emit("newMessage", {
         text,
         chatRoomId,
-        sender: accountId,
+        sender: account._id,
         sentDateTime: new Date(),
       });
     });
@@ -76,13 +75,13 @@ export function setupSocket(io: SocketIOServer) {
     socket.on("disconnect", () => {
       const user = userLeave(socket.id);
       if (user) {
-        io.to(user.room).emit(
+        io.to(user.chatRoomId.toString()).emit(
           "message",
-          formatMessage(botName, `${user.username} has left the chat.`)
+          formatMessage(botName, `${user.chatRoomId} has left the chat.`)
         );
-        io.to(user.room).emit("roomUsers", {
-          room: user.room,
-          users: getRoomUsers(user.room),
+        io.to(user.chatRoomId.toString()).emit("roomUsers", {
+          room: user.chatRoomId,
+          users: getRoomUsers(user.chatRoomId),
         });
       }
     });

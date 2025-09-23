@@ -15,8 +15,8 @@ export const authenticateIdToken = async (
 
   const decodedToken = await firebaseAdmin.auth().verifyIdToken(idToken);
   const { email } = decodedToken;
-  
-  if (!req.session.account || req.session.account.email !== email) {
+
+  if (!req.session?.account || req.session.account.email !== email) {
     throw new AppError("Invalid session", 401);
   }
 

@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import validator from "validator";
 
 export interface IAccount extends Document {
+  _id: mongoose.Types.ObjectId;
   name: string;
   email: string;
   createdAt: Date;
@@ -9,6 +10,10 @@ export interface IAccount extends Document {
 }
 
 const accountSchema = new mongoose.Schema({
+  _id: {
+    type: mongoose.Schema.Types.ObjectId,
+    auto: true,
+  },
   name: {
     type: String,
     required: [true, "Name is required"],

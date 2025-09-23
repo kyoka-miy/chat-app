@@ -29,7 +29,9 @@ export class AuthController {
     });
 
     // Store account info in session
-    req.session.account = account;
+    if (req.session) {
+      req.session.account = account;
+    }
     res
       .status(200)
       .json({ message: "Authentication success", account: account });
@@ -52,7 +54,9 @@ export class AuthController {
     });
 
     // Store account info in session
-    req.session.account = account;
+    if (req.session) {
+      req.session.account = account;
+    }
     res.status(201).json({ message: "Account created", account: account });
   });
 }

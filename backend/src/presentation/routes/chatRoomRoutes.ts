@@ -4,7 +4,6 @@ import {
   AddChatRoomDto,
   ChatRoomController,
   DeleteChatRoomDto,
-  GetChatRoomsDto,
 } from "../controller/chatRoomController";
 import { validateDto } from "../../middlewares/validateDto";
 import { authenticateIdToken } from "../../middlewares/authenticateIdToken";
@@ -17,7 +16,6 @@ const chatRoomController = container.resolve(ChatRoomController);
 chatRoomRouter.get(
   "/",
   authenticateIdToken,
-  validateDto(GetChatRoomsDto),
   chatRoomController.getChatRooms
 );
 chatRoomRouter.post(

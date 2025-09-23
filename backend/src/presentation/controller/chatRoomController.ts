@@ -15,9 +15,13 @@ export class ChatRoomController {
     private addChatRoomsUseCase: AddChatRoomUseCase,
     private deleteChatRoomUseCase: DeleteChatRoomUseCase
   ) {}
-  // TODO: Get account id from token, page
+
   getChatRooms = catchAsync(async (req: Request, res: Response) => {
-    const accountId = new ObjectId(req.query.accountId as string);
+    const accountId = req.account?._id;
+    if (!accountId) {
+      res.status(400).json({ message: "Account ID is not set in session" });
+      return;
+    }
     const chatRooms = await this.getChatRoomsUseCase.execute(accountId);
     res.status(200).json(chatRooms);
   });
@@ -33,11 +37,6 @@ export class ChatRoomController {
     await this.deleteChatRoomUseCase.execute(chatRoomId);
     res.status(200).json({ message: "Chat room deleted successfully" });
   });
-}
-
-export class GetChatRoomsDto {
-  @ValidObjectId()
-  accountId!: ObjectId;
 }
 
 export class AddChatRoomDto {

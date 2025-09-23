@@ -6,7 +6,7 @@ import { MessageInput } from "../../components/MessageInput";
 import { getSocket } from "../../utils/socket";
 import { getChatRooms } from "../../utils/api";
 import { auth } from "@/utils/firebase";
-import { onAuthStateChanged, User } from "firebase/auth";
+import { User } from "firebase/auth";
 import { signOut } from "firebase/auth";
 
 export default function Home() {
@@ -18,30 +18,29 @@ export default function Home() {
   );
   const [user, setUser] = useState<User | null>(null);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser);
-      if (firebaseUser) {
-        setAccountId(firebaseUser.uid);
-      }
-    });
-    return () => unsubscribe();
-  }, []);
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+  //     setUser(firebaseUser);
+  //     if (firebaseUser) {
+  //       setAccountId(firebaseUser.uid);
+  //     }
+  //   });
+  //   return () => unsubscribe();
+  // }, []);
 
   useEffect(() => {
-    if (!accountId) return;
-    getChatRooms(accountId)
+    getChatRooms()
       .then((data) => {
         setChatRooms(data);
         if (data.length > 0) setCurrentChatRoomId(data[0]._id);
       })
       .catch(() => setChatRooms([]));
-  }, [accountId]);
+  }, []);
 
   useEffect(() => {
     const socket = getSocket();
-    if (accountId && currentChatRoomId) {
-      socket.emit("joinRoom", { username: accountId, room: currentChatRoomId });
+    if (currentChatRoomId) {
+      socket.emit("joinRoom", { chatRoomId: currentChatRoomId });
     }
     socket.off("message");
     socket.on("newMessage", (msg: any) => {
@@ -60,16 +59,13 @@ export default function Home() {
       socket.off("newMessage");
       socket.off("joinRoom");
     };
-  }, [accountId, currentChatRoomId]);
+  }, [currentChatRoomId]);
 
   const handleSend = (text: string) => {
-    if (!accountId) return;
     const socket = getSocket();
     socket.emit("chatMessage", {
       text,
-      chatRoomId: currentChatRoomId,
-      // FIXME: Return account object from context
-      accountId: accountId,
+      chatRoomId: currentChatRoomId
     });
   };
 
@@ -110,11 +106,7 @@ export default function Home() {
           messages={messages[currentChatRoomId] || []}
           account={accountId}
         />
-        <MessageInput
-          onSend={handleSend}
-          user={accountId}
-          setAccount={setAccountId}
-        />
+        <MessageInput onSend={handleSend} />
       </div>
     </div>
   );

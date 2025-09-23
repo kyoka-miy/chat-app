@@ -36,7 +36,7 @@ const DB = process.env.DATABASE.replace(
 
 mongoose.connect(DB).then(() => {
   console.log("DB connection successful!");
-  setupSession(app); // Initialize session after DB connection
+  const sessionMiddleware = setupSession(app); // Get session middleware instance
 
   // Register routes after session middleware
   app.use("/accounts", accountRouter);
@@ -48,6 +48,11 @@ mongoose.connect(DB).then(() => {
     next(new AppError(`Route ${req.originalUrl} not found`, 404));
   });
   app.use(errorHandler);
+
+  // Socket.io: use session middleware
+  io.use((socket, next) => {
+    sessionMiddleware(socket.request as any, {} as any, next as any);
+  });
 
   const PORT = process.env.PORT || 3000;
   server.listen(PORT, () => {
