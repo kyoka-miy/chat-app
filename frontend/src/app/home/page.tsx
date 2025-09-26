@@ -6,24 +6,14 @@ import { MessageInput } from "../../components/MessageInput";
 import { getSocket } from "../../utils/socket";
 import { getChatRooms } from "../../utils/api";
 import { auth } from "@/utils/firebase";
-import { User } from "firebase/auth";
 import { signOut } from "firebase/auth";
+import { useAccount } from "@/context/AccountContext";
 
 export default function Home() {
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
   const [currentChatRoomId, setCurrentChatRoomId] = useState<string>("");
   const [messages, setMessages] = useState<{ [roomId: string]: Message[] }>({});
-  const [user, setUser] = useState<User | null>(null);
-
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-  //     setUser(firebaseUser);
-  //     if (firebaseUser) {
-  //       setAccountId(firebaseUser.uid);
-  //     }
-  //   });
-  //   return () => unsubscribe();
-  // }, []);
+  const { account } = useAccount();
 
   useEffect(() => {
     getChatRooms()
@@ -37,7 +27,7 @@ export default function Home() {
   useEffect(() => {
     const socket = getSocket();
     if (currentChatRoomId) {
-      socket.emit("joinRoom", { chatRoomId: currentChatRoomId });
+      socket.emit("joinRoom", currentChatRoomId);
     }
     socket.off("message");
     socket.on("newMessage", (msg: any) => {
@@ -68,7 +58,6 @@ export default function Home() {
 
   const logout = async () => {
     await signOut(auth);
-    setUser(null);
     window.location.href = "/login";
   };
 
@@ -81,17 +70,15 @@ export default function Home() {
       />
       <div className="flex flex-col flex-1">
         <div className="flex justify-between items-center p-4 border-b">
-          {user && (
-            <>
-              <span>Welcome, {user.displayName || user.email}</span>
-              <button
-                onClick={logout}
-                className="ml-4 px-3 py-1 bg-gray-400 rounded hover:cursor-pointer"
-              >
-                Logout
-              </button>
-            </>
-          )}
+          <>
+            <span>Welcome, {account?.name}</span>
+            <button
+              onClick={logout}
+              className="ml-4 px-3 py-1 bg-gray-400 rounded hover:cursor-pointer"
+            >
+              Logout
+            </button>
+          </>
         </div>
         <header className="p-4 border-b bg-gray-50 dark:bg-gray-900">
           <h1 className="text-xl font-bold">

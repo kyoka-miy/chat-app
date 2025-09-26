@@ -29,12 +29,10 @@ function getRoomUsers(chatRoomId: ObjectId) {
 
 export function setupSocket(io: SocketIOServer) {
   io.on("connection", (socket) => {
-    // Get account info from session
     const account = socket.request.session?.account;
     if (!account) {
       console.log("No account in session");
       return;
-      // throw new AppError("No account in session", 404);
     }
 
     socket.on("joinRoom", async (chatRoomId) => {
@@ -42,7 +40,6 @@ export function setupSocket(io: SocketIOServer) {
       userJoin(socket.id, account._id, chatRoomId);
       socket.join(chatRoomId);
 
-      // Get past messages and send them with joinRoom event
       try {
         const getMessagesUseCase = container.resolve(GetMessagesUseCase);
         const messages = await getMessagesUseCase.execute(chatRoomId);
