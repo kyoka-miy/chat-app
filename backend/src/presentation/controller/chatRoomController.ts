@@ -7,6 +7,7 @@ import { catchAsync } from "../../middlewares/catchAsync";
 import { Length } from "class-validator";
 import { ValidObjectId } from "../../validators/validObjectId";
 import { DeleteChatRoomUseCase } from "../../usecase/chat-room/deleteChatRoomUseCase";
+import { AppError } from "../../utils/appError";
 
 @autoInjectable()
 export class ChatRoomController {
@@ -27,8 +28,12 @@ export class ChatRoomController {
   });
 
   addChatRoom = catchAsync(async (req: Request, res: Response) => {
+    const account = req.account;
+    if (!account) {
+      throw new AppError("Account not found in session", 404);
+    }
     const { name, accountIds } = req.body;
-    await this.addChatRoomsUseCase.execute(name, accountIds);
+    await this.addChatRoomsUseCase.execute(name, [accountIds, account._id].flat());
     res.status(201).json({ message: "Chat room created successfully" });
   });
 

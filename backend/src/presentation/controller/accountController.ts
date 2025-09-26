@@ -18,7 +18,11 @@ export class AccountController {
 
   // TODO: fetch only followed accounts, add pagination, search, etc.
   getAccounts = catchAsync(async (req: Request, res: Response) => {
-    const accounts = await this.getAccountsUsecase.execute();
+    const account = req.account;
+    if (!account) {
+      throw new AppError("Account not found in session", 404);
+    }
+    const accounts = await this.getAccountsUsecase.execute(account._id);
     res.status(200).json(accounts);
   });
 }

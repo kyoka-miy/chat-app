@@ -16,8 +16,33 @@ export async function deleteChatRoom(chatRoomId: string) {
 }
 
 export async function getAccount() {
-    const res = await fetch(`http://localhost:3000/accounts/me`, {
-      credentials: "include", // Send cookies with request
-    });
-    return res.json();
+  const res = await fetch(`http://localhost:3000/accounts/me`, {
+    credentials: "include",
+  });
+  return res.json();
+}
+
+export async function getAccounts() {
+  const res = await fetch(`http://localhost:3000/accounts`, {
+    credentials: "include",
+  });
+  return res.json();
+}
+
+export async function addChatRoom({
+  name,
+  accountIds,
+}: {
+  name: string;
+  accountIds: string[];
+}) {
+  const res = await fetch(`http://localhost:3000/chat-rooms`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({ name, accountIds }),
+  });
+  return res.json();
 }

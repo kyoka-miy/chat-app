@@ -5,8 +5,8 @@ import { ObjectId } from "mongodb";
 
 @injectable()
 export class AccountRepository implements IAccountRepository {
-  async findAll(): Promise<IAccount[]> {
-    return Account.find();
+  async findAllExceptMe(myAccountId: ObjectId): Promise<IAccount[]> {
+    return Account.find({ _id: { $ne: myAccountId } }).exec();
   }
 
   async findByIds(accountIds: ObjectId[]): Promise<IAccount[]> {

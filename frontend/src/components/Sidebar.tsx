@@ -1,6 +1,8 @@
-import { deleteChatRoom } from "@/utils/api";
-import React, { useState } from "react";
+import { deleteChatRoom, getAccounts, addChatRoom } from "@/utils/api";
+import React, { useEffect, useState } from "react";
+import { Account } from "./ChatMessages";
 
+// TODO: Move types to a separate file
 export type ChatRoom = {
   _id: string;
   name: string;
@@ -20,35 +22,65 @@ export const Sidebar: React.FC<SidebarProps> = ({
   currentRoomId,
   onSelectRoom,
 }) => {
-  const [modalOpen, setModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [targetRoomId, setTargetRoomId] = useState<string | null>(null);
   const [targetRoomName, setTargetRoomName] = useState<string>("");
+
+  const [addModalOpen, setAddModalOpen] = useState(false);
+
+  // Modal state for new chat room
+  const [newChatRoomName, setNewChatRoomName] = useState("");
+  const [selectedAccounts, setSelectedAccounts] = useState<string[]>([]);
+  const [accounts, setAccounts] = useState<Account[]>([]);
+
+  useEffect(() => {
+    if (addModalOpen) {
+      getAccounts().then((data) => {
+        setAccounts(data);
+      });
+    }
+  }, [addModalOpen]);
 
   const handleDeleteClick = (roomId: string, roomName: string) => {
     setTargetRoomId(roomId);
     setTargetRoomName(roomName);
-    setModalOpen(true);
+    setDeleteModalOpen(true);
   };
 
   const handleConfirmDelete = () => {
     if (targetRoomId) {
       deleteChatRoom(targetRoomId);
     }
-    setModalOpen(false);
-    setTargetRoomId(null);
-    setTargetRoomName("");
     window.location.reload();
   };
 
   const handleCancel = () => {
-    setModalOpen(false);
+    setDeleteModalOpen(false);
     setTargetRoomId(null);
     setTargetRoomName("");
   };
 
+  const handleCreateRoom = async () => {
+    console.log("Creating room:", newChatRoomName, selectedAccounts);
+    await addChatRoom({ name: newChatRoomName, accountIds: selectedAccounts });
+    setAddModalOpen(false);
+    setNewChatRoomName("");
+    setSelectedAccounts([]);
+    // window.location.reload();
+  };
+
   return (
     <aside className="w-56 bg-gray-100 dark:bg-gray-800 h-full p-4 flex flex-col gap-2 border-r">
-      <h2 className="text-lg font-bold mb-4">Chat Rooms</h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-lg font-bold">Chat Rooms</h2>
+        <button
+          className="ml-2 text-gray-400 hover:text-blue-600 p-1 rounded transition-colors hover:cursor-pointer"
+          title="Add room"
+          onClick={() => setAddModalOpen(true)}
+        >
+          ＋
+        </button>
+      </div>
       <ul className="flex-1 space-y-2">
         {rooms.map((room) => (
           <li
@@ -75,7 +107,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </li>
         ))}
       </ul>
-      {modalOpen && (
+      {deleteModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
           <div className="bg-white dark:bg-gray-800 p-6 rounded shadow-lg w-80">
             <h3 className="text-lg font-semibold mb-4">Confirm Deletion</h3>
@@ -95,6 +127,61 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 onClick={handleConfirmDelete}
               >
                 Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {addModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-50">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded shadow-lg w-80">
+            <h3 className="text-lg font-semibold mb-4">Add Chat Room</h3>
+            <div className="mb-4">
+              <label className="block mb-2 font-medium">Chat Room Name</label>
+              <input
+                type="text"
+                className="w-full px-3 py-2 rounded border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900"
+                value={newChatRoomName}
+                onChange={(e) => setNewChatRoomName(e.target.value)}
+                placeholder="Enter chat room name"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2 font-medium">Select Accounts</label>
+              <div className="flex flex-col gap-2 max-h-40 overflow-y-auto">
+                {accounts.map((acc) => (
+                  <label key={acc._id} className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      value={acc._id}
+                      checked={selectedAccounts.includes(acc._id)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setSelectedAccounts([...selectedAccounts, acc._id]);
+                        } else {
+                          setSelectedAccounts(
+                            selectedAccounts.filter((id) => id !== acc._id)
+                          );
+                        }
+                      }}
+                    />
+                    <span>{acc.name}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+            <div className="flex justify-end gap-2">
+              <button
+                className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 cursor-pointer"
+                onClick={() => setAddModalOpen(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600 cursor-pointer"
+                onClick={handleCreateRoom}
+              >
+                Create
               </button>
             </div>
           </div>
