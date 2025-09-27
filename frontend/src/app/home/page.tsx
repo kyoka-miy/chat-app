@@ -4,7 +4,7 @@ import { Sidebar, ChatRoom } from "../../components/Sidebar";
 import { ChatMessages, Message } from "../../components/ChatMessages";
 import { MessageInput } from "../../components/MessageInput";
 import { getSocket } from "../../utils/socket";
-import { getChatRooms } from "../../utils/api";
+import { getChatRooms, logout } from "../../utils/api";
 import { auth } from "@/utils/firebase";
 import { signOut } from "firebase/auth";
 import { useAccount } from "@/context/AccountContext";
@@ -56,8 +56,9 @@ export default function Home() {
     });
   };
 
-  const logout = async () => {
+  const handleLogout = async () => {
     await signOut(auth);
+    await logout();
     window.location.href = "/login";
   };
 
@@ -73,7 +74,7 @@ export default function Home() {
           <>
             <span>Welcome, {account?.name}</span>
             <button
-              onClick={logout}
+              onClick={handleLogout}
               className="ml-4 px-3 py-1 bg-gray-400 rounded hover:cursor-pointer"
             >
               Logout

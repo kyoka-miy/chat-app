@@ -46,3 +46,11 @@ export async function addChatRoom({
   });
   return res.json();
 }
+
+export async function logout() {
+  const res = await fetch("http://localhost:3000/auth/logout", {
+    method: "POST",
+    credentials: "include",
+  });
+  return res.json();
+}

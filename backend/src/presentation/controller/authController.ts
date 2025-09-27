@@ -59,4 +59,23 @@ export class AuthController {
     }
     res.status(201).json({ message: "Account created", account: account });
   });
+
+  logout = catchAsync(async (req: Request, res: Response) => {
+    res.clearCookie("idToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+    });
+    res.clearCookie("connect.sid", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+    });
+    if (req.session) {
+      req.session.destroy(() => {});
+    }
+    res.status(200).json({ message: "Logout success" });
+  });
 }
