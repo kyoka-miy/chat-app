@@ -15,11 +15,11 @@ const LoginPage = () => {
 
       const response = await fetch("http://localhost:3000/auth/login", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${idToken}`,
         },
-        credentials: "include", // Include cookies in the request
+        body: JSON.stringify({ idToken, refreshToken: user.refreshToken }),
       });
 
       if (response.ok) {

@@ -54,3 +54,11 @@ export async function logout() {
   });
   return res.json();
 }
+
+export async function refreshToken() {
+  const res = await fetch("http://localhost:3000/auth/refresh-token", {
+    method: "POST",
+    credentials: "include",
+  });
+  return res.json();
+}
