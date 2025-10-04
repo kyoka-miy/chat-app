@@ -2,6 +2,7 @@ import express from "express";
 import {
   AuthController,
   AuthenticationDto,
+  RefreshTokenDto,
 } from "../controller/authController";
 import { container } from "tsyringe";
 import { validateDto } from "../../middlewares/validateDto";
@@ -17,6 +18,10 @@ authRouter.post(
   authController.signup
 );
 authRouter.post("/logout", authController.logout);
-authRouter.post("/refresh-token", authController.refreshToken);
+authRouter.post(
+  "/refresh-token",
+  validateDto(RefreshTokenDto),
+  authController.refreshToken
+);
 
 export default authRouter;

@@ -19,10 +19,11 @@ const SignUpPage = () => {
 
       const response = await fetch("http://localhost:3000/auth/signup", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${idToken}`,
         },
+        body: JSON.stringify({ idToken, refreshToken: user.refreshToken }),
       });
 
       if (response.ok) {

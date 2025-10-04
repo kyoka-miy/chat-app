@@ -55,10 +55,14 @@ export async function logout() {
   return res.json();
 }
 
-export async function refreshToken() {
+export async function refreshToken({ refreshToken }: { refreshToken: string }) {
   const res = await fetch("http://localhost:3000/auth/refresh-token", {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
     credentials: "include",
+    body: JSON.stringify({ refreshToken }),
   });
   return res.json();
 }
