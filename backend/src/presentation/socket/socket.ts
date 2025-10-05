@@ -48,7 +48,6 @@ export function setupSocket(io: SocketIOServer) {
         socket.emit("error", { message: "Failed to get messages" });
       }
 
-      socket.emit("message", formatMessage(botName, "Welcome to the chat!"));
       socket.broadcast
         .to(chatRoomId)
         .emit(
@@ -57,16 +56,15 @@ export function setupSocket(io: SocketIOServer) {
         );
     });
 
-    socket.on("chatMessage", async ({ text, chatRoomId }) => {
+    socket.on("chatMessage", ({ text, chatRoomId }) => {
       if (!text || !chatRoomId) return;
-      const addMessageUseCase = container.resolve(AddMessageUseCase);
-      await addMessageUseCase.execute(text, chatRoomId, account._id);
       io.to(chatRoomId).emit("newMessage", {
         text,
-        chatRoomId,
-        sender: account._id,
+        sender: account,
         sentDateTime: new Date(),
       });
+      const addMessageUseCase = container.resolve(AddMessageUseCase);
+      addMessageUseCase.execute(text, chatRoomId, account._id);
     });
 
     socket.on("disconnect", () => {
