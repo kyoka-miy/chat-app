@@ -1,29 +1,30 @@
+import { CONSTANTS } from "./constants";
+
 export async function getChatRooms() {
-  const res = await fetch(`http://localhost:3000/chat-rooms`, {
-    credentials: "include", // Send cookies with request
+  const res = await fetch(CONSTANTS.ENDPOINT.CHAT_ROOMS, {
+    credentials: "include",
   });
-  if (!res.ok) throw new Error("Failed to fetch chat rooms");
   return res.json();
 }
 
 export async function deleteChatRoom(chatRoomId: string) {
-  const res = await fetch(`http://localhost:3000/chat-rooms/${chatRoomId}`, {
+  const res = await fetch(CONSTANTS.ENDPOINT.CHAT_ROOM(chatRoomId), {
     method: "DELETE",
-    credentials: "include", // Send cookies with request
+    credentials: "include",
   });
   if (!res.ok) throw new Error("Failed to delete chat room");
   return res.json();
 }
 
 export async function getAccount() {
-  const res = await fetch(`http://localhost:3000/accounts/me`, {
+  const res = await fetch(CONSTANTS.ENDPOINT.ACCOUNT_ME, {
     credentials: "include",
   });
   return res.json();
 }
 
 export async function getAccounts() {
-  const res = await fetch(`http://localhost:3000/accounts`, {
+  const res = await fetch(CONSTANTS.ENDPOINT.ACCOUNTS, {
     credentials: "include",
   });
   return res.json();
@@ -36,7 +37,7 @@ export async function addChatRoom({
   name: string;
   accountIds: string[];
 }) {
-  const res = await fetch(`http://localhost:3000/chat-rooms`, {
+  const res = await fetch(CONSTANTS.ENDPOINT.CHAT_ROOMS, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -48,21 +49,9 @@ export async function addChatRoom({
 }
 
 export async function logout() {
-  const res = await fetch("http://localhost:3000/auth/logout", {
+  const res = await fetch(CONSTANTS.ENDPOINT.AUTH_LOGOUT, {
     method: "POST",
     credentials: "include",
-  });
-  return res.json();
-}
-
-export async function refreshToken({ refreshToken }: { refreshToken: string }) {
-  const res = await fetch("http://localhost:3000/auth/refresh-token", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-    body: JSON.stringify({ refreshToken }),
   });
   return res.json();
 }

@@ -7,7 +7,7 @@ import React, {
   ReactNode,
 } from "react";
 import { getAccount } from "../utils/api";
-import { Account } from "@/components/ChatMessages";
+import { Account } from "@/utils/type";
 
 interface AccountContextType {
   account: Account | null;

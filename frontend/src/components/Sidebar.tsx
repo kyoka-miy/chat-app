@@ -1,15 +1,6 @@
 import { deleteChatRoom, getAccounts, addChatRoom } from "@/utils/api";
+import { Account, ChatRoom } from "@/utils/type";
 import React, { useEffect, useState } from "react";
-import { Account } from "./ChatMessages";
-
-// TODO: Move types to a separate file
-export type ChatRoom = {
-  _id: string;
-  name: string;
-  createdDateTime: Date;
-  accounts: string[];
-  messages: string[];
-};
 
 type SidebarProps = {
   rooms: ChatRoom[];
@@ -61,12 +52,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
   };
 
   const handleCreateRoom = async () => {
-    console.log("Creating room:", newChatRoomName, selectedAccounts);
     await addChatRoom({ name: newChatRoomName, accountIds: selectedAccounts });
     setAddModalOpen(false);
     setNewChatRoomName("");
     setSelectedAccounts([]);
-    // window.location.reload();
+    window.location.reload();
   };
 
   return (

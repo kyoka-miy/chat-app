@@ -1,21 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { useAccount } from "../context/AccountContext";
-
-export type Message = {
-  _id: string;
-  text: string;
-  sentDateTime: Date;
-  isRead: boolean;
-  sender: Account;
-  chatRoom: string;
-};
-
-export type Account = {
-  _id: string;
-  name: string;
-  email: string;
-  createdAt: Date;
-};
+import { Message } from "@/utils/type";
 
 type ChatMessagesProps = {
   messages: Message[];

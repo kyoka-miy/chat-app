@@ -1,13 +1,15 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Sidebar, ChatRoom } from "../../components/Sidebar";
-import { ChatMessages, Message } from "../../components/ChatMessages";
 import { MessageInput } from "../../components/MessageInput";
 import { getSocket } from "../../utils/socket";
 import { getChatRooms, logout } from "../../utils/api";
 import { auth } from "@/utils/firebase";
 import { signOut } from "firebase/auth";
 import { useAccount } from "@/context/AccountContext";
+import { CONSTANTS } from "@/utils/constants";
+import { ChatRoom, Message } from "@/utils/type";
+import { ChatMessages } from "@/components/ChatMessages";
+import { Sidebar } from "@/components/Sidebar";
 
 export default function Home() {
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
@@ -59,7 +61,7 @@ export default function Home() {
   const handleLogout = async () => {
     await signOut(auth);
     await logout();
-    window.location.href = "/login";
+    window.location.href = CONSTANTS.LINK.LOGIN;
   };
 
   return (

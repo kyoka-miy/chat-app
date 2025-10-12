@@ -1,9 +1,9 @@
 "use client";
-import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AccountProvider } from "../context/AccountContext";
 import { usePathname } from "next/navigation";
+import { CONSTANTS } from "@/utils/constants";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
-  const isAuthPage = pathname === "/login" || pathname === "/signup";
+  const isAuthPage = pathname === CONSTANTS.LINK.LOGIN || pathname === CONSTANTS.LINK.SIGN_UP;
   return (
     <html lang="en">
       <body

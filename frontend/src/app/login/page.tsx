@@ -1,4 +1,5 @@
 "use client";
+import { CONSTANTS } from "@/utils/constants";
 import { auth } from "../../utils/firebase";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useRouter } from "next/navigation";
@@ -13,7 +14,7 @@ const LoginPage = () => {
       const user = result.user;
       const idToken = await user.getIdToken();
 
-      const response = await fetch("http://localhost:3000/auth/login", {
+      const response = await fetch(CONSTANTS.ENDPOINT.AUTH_LOGIN, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -23,7 +24,7 @@ const LoginPage = () => {
       });
 
       if (response.ok) {
-        router.push("/home");
+        router.push(CONSTANTS.LINK.HOME);
       } else {
         console.error("Authentication failed");
       }

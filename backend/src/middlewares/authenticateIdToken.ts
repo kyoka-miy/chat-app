@@ -10,12 +10,10 @@ export const authenticateIdToken = async (
   const idToken = req.cookies.idToken;
   const refreshToken = req.cookies.refreshToken;
 
-  if (!idToken) {
-    throw new AppError("No token provided", 401);
-  }
   if (!refreshToken) {
     throw new AppError("No refresh token provided", 401);
   }
+
 
   try {
     const decodedToken = await firebaseAdmin.auth().verifyIdToken(idToken);
@@ -28,7 +26,7 @@ export const authenticateIdToken = async (
   } catch (err: any) {
     console.error("Token verification error:", err);
     // If token is expired, try to refresh it
-    if (err.code === "auth/id-token-expired") {
+    if (err.code === "auth/id-token-expired" || err.code === "auth/argument-error") {
       try {
         const response = await fetch(
           `https://securetoken.googleapis.com/v1/token?key=${process.env.FIREBASE_API_KEY}`,
