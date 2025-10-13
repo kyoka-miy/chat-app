@@ -14,7 +14,6 @@ export const authenticateIdToken = async (
     throw new AppError("No refresh token provided", 401);
   }
 
-
   try {
     const decodedToken = await firebaseAdmin.auth().verifyIdToken(idToken);
     const { email } = decodedToken;

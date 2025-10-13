@@ -6,8 +6,9 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-import { getAccount } from "../utils/api";
+import { useGet } from "../utils/api";
 import { Account } from "@/utils/type";
+import { CONSTANTS } from "@/utils/constants";
 
 interface AccountContextType {
   account: Account | null;
@@ -27,7 +28,7 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
   const [account, setAccount] = useState<Account | null>(null);
 
   useEffect(() => {
-    getAccount().then((data) => {
+    useGet(CONSTANTS.ENDPOINT.ACCOUNT_ME).then((data) => {
       setAccount(data);
     });
   }, []);

@@ -1,57 +1,29 @@
-import { CONSTANTS } from "./constants";
-
-export async function getChatRooms() {
-  const res = await fetch(CONSTANTS.ENDPOINT.CHAT_ROOMS, {
+export async function useGet(url: string) {
+  const res = await fetch(url, {
     credentials: "include",
   });
+  if (!res.ok) throw new Error("Failed to fetch data");
   return res.json();
 }
 
-export async function deleteChatRoom(chatRoomId: string) {
-  const res = await fetch(CONSTANTS.ENDPOINT.CHAT_ROOM(chatRoomId), {
-    method: "DELETE",
-    credentials: "include",
-  });
-  if (!res.ok) throw new Error("Failed to delete chat room");
-  return res.json();
-}
-
-export async function getAccount() {
-  const res = await fetch(CONSTANTS.ENDPOINT.ACCOUNT_ME, {
-    credentials: "include",
-  });
-  return res.json();
-}
-
-export async function getAccounts() {
-  const res = await fetch(CONSTANTS.ENDPOINT.ACCOUNTS, {
-    credentials: "include",
-  });
-  return res.json();
-}
-
-export async function addChatRoom({
-  name,
-  accountIds,
-}: {
-  name: string;
-  accountIds: string[];
-}) {
-  const res = await fetch(CONSTANTS.ENDPOINT.CHAT_ROOMS, {
+export async function usePost(url: string, body: any) {
+  const res = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     credentials: "include",
-    body: JSON.stringify({ name, accountIds }),
+    body: JSON.stringify(body),
   });
+  if (!res.ok) throw new Error("Failed to post data");
   return res.json();
 }
 
-export async function logout() {
-  const res = await fetch(CONSTANTS.ENDPOINT.AUTH_LOGOUT, {
-    method: "POST",
+export async function useDelete(url: string) {
+  const res = await fetch(url, {
+    method: "DELETE",
     credentials: "include",
   });
+  if (!res.ok) throw new Error("Failed to delete data");
   return res.json();
 }
