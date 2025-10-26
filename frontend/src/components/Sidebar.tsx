@@ -1,7 +1,7 @@
-import { useDelete, useGet, usePost } from "@/utils/api";
-import { CONSTANTS } from "@/utils/constants";
-import { Account, ChatRoom } from "@/utils/type";
-import React, { useEffect, useState } from "react";
+import { useDelete, useGet, usePost } from '@/utils/api';
+import { CONSTANTS } from '@/utils/constants';
+import { Account, ChatRoom } from '@/utils/type';
+import React, { useEffect, useState } from 'react';
 
 type SidebarProps = {
   rooms: ChatRoom[];
@@ -9,19 +9,15 @@ type SidebarProps = {
   onSelectRoom: (roomId: string) => void;
 };
 
-export const Sidebar: React.FC<SidebarProps> = ({
-  rooms,
-  currentRoomId,
-  onSelectRoom,
-}) => {
+export const Sidebar: React.FC<SidebarProps> = ({ rooms, currentRoomId, onSelectRoom }) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [targetRoomId, setTargetRoomId] = useState<string | null>(null);
-  const [targetRoomName, setTargetRoomName] = useState<string>("");
+  const [targetRoomName, setTargetRoomName] = useState<string>('');
 
   const [addModalOpen, setAddModalOpen] = useState(false);
 
   // Modal state for new chat room
-  const [newChatRoomName, setNewChatRoomName] = useState("");
+  const [newChatRoomName, setNewChatRoomName] = useState('');
   const [selectedAccounts, setSelectedAccounts] = useState<string[]>([]);
   const [accounts, setAccounts] = useState<Account[]>([]);
 
@@ -49,13 +45,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const handleCancel = () => {
     setDeleteModalOpen(false);
     setTargetRoomId(null);
-    setTargetRoomName("");
+    setTargetRoomName('');
   };
 
   const handleCreateRoom = async () => {
-    await usePost(CONSTANTS.ENDPOINT.CHAT_ROOMS, { name: newChatRoomName, accountIds: selectedAccounts });
+    await usePost(CONSTANTS.ENDPOINT.CHAT_ROOMS, {
+      name: newChatRoomName,
+      accountIds: selectedAccounts,
+    });
     setAddModalOpen(false);
-    setNewChatRoomName("");
+    setNewChatRoomName('');
     setSelectedAccounts([]);
     window.location.reload();
   };
@@ -74,15 +73,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
       <ul className="flex-1 space-y-2">
         {rooms.map((room) => (
-          <li
-            key={room._id}
-            className="flex items-center justify-between group"
-          >
+          <li key={room._id} className="flex items-center justify-between group">
             <button
               className={`flex-1 text-left px-3 py-2 rounded transition-colors ${
                 currentRoomId === room._id
-                  ? "bg-blue-500 text-white"
-                  : "hover:bg-blue-100 dark:hover:bg-blue-700"
+                  ? 'bg-blue-500 text-white'
+                  : 'hover:bg-blue-100 dark:hover:bg-blue-700'
               } hover:cursor-pointer`}
               onClick={() => onSelectRoom(room._id)}
             >
@@ -103,8 +99,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div className="bg-white dark:bg-gray-800 p-6 rounded shadow-lg w-80">
             <h3 className="text-lg font-semibold mb-4">Confirm Deletion</h3>
             <p className="mb-4">
-              Are you sure you want to delete{" "}
-              <span className="font-bold">{targetRoomName}</span>?
+              Are you sure you want to delete <span className="font-bold">{targetRoomName}</span>?
             </p>
             <div className="flex justify-end gap-2">
               <button
@@ -150,9 +145,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         if (e.target.checked) {
                           setSelectedAccounts([...selectedAccounts, acc._id]);
                         } else {
-                          setSelectedAccounts(
-                            selectedAccounts.filter((id) => id !== acc._id)
-                          );
+                          setSelectedAccounts(selectedAccounts.filter((id) => id !== acc._id));
                         }
                       }}
                     />

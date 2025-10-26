@@ -1,19 +1,19 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { MessageInput } from "../../components/MessageInput";
-import { getSocket } from "../../utils/socket";
-import { useGet, usePost } from "../../utils/api";
-import { auth } from "@/utils/firebase";
-import { signOut } from "firebase/auth";
-import { useAccount } from "@/context/AccountContext";
-import { CONSTANTS } from "@/utils/constants";
-import { ChatRoom, Message } from "@/utils/type";
-import { ChatMessages } from "@/components/ChatMessages";
-import { Sidebar } from "@/components/Sidebar";
+'use client';
+import React, { useState, useEffect } from 'react';
+import { MessageInput } from '../../components/MessageInput';
+import { getSocket } from '../../utils/socket';
+import { useGet, usePost } from '../../utils/api';
+import { auth } from '@/utils/firebase';
+import { signOut } from 'firebase/auth';
+import { useAccount } from '@/context/AccountContext';
+import { CONSTANTS } from '@/utils/constants';
+import { ChatRoom, Message } from '@/utils/type';
+import { ChatMessages } from '@/components/ChatMessages';
+import { Sidebar } from '@/components/Sidebar';
 
 export default function Home() {
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
-  const [currentChatRoomId, setCurrentChatRoomId] = useState<string>("");
+  const [currentChatRoomId, setCurrentChatRoomId] = useState<string>('');
   const [messages, setMessages] = useState<{ [roomId: string]: Message[] }>({});
   const { account } = useAccount();
 
@@ -29,30 +29,30 @@ export default function Home() {
   useEffect(() => {
     const socket = getSocket();
     if (currentChatRoomId) {
-      socket.emit("joinRoom", currentChatRoomId);
+      socket.emit('joinRoom', currentChatRoomId);
     }
-    socket.off("message");
-    socket.on("newMessage", (msg: any) => {
+    socket.off('message');
+    socket.on('newMessage', (msg: any) => {
       setMessages((prev) => ({
         ...prev,
         [currentChatRoomId]: [...(prev[currentChatRoomId] || []), msg],
       }));
     });
-    socket.on("joinRoom", (data: any) => {
+    socket.on('joinRoom', (data: any) => {
       setMessages((prev) => ({
         ...prev,
         [currentChatRoomId]: data.messages,
       }));
     });
     return () => {
-      socket.off("newMessage");
-      socket.off("joinRoom");
+      socket.off('newMessage');
+      socket.off('joinRoom');
     };
   }, [currentChatRoomId]);
 
   const handleSend = (text: string) => {
     const socket = getSocket();
-    socket.emit("chatMessage", {
+    socket.emit('chatMessage', {
       text,
       chatRoomId: currentChatRoomId,
     });

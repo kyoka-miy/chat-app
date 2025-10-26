@@ -1,14 +1,8 @@
-"use client";
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  ReactNode,
-} from "react";
-import { useGet } from "../utils/api";
-import { Account } from "@/utils/type";
-import { CONSTANTS } from "@/utils/constants";
+'use client';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { useGet } from '../utils/api';
+import { Account } from '@/utils/type';
+import { CONSTANTS } from '@/utils/constants';
 
 interface AccountContextType {
   account: Account | null;
@@ -19,8 +13,7 @@ const AccountContext = createContext<AccountContextType | undefined>(undefined);
 
 export const useAccount = () => {
   const context = useContext(AccountContext);
-  if (!context)
-    throw new Error("useAccount must be used within AccountProvider");
+  if (!context) throw new Error('useAccount must be used within AccountProvider');
   return context;
 };
 
@@ -34,8 +27,6 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   return (
-    <AccountContext.Provider value={{ account, setAccount }}>
-      {children}
-    </AccountContext.Provider>
+    <AccountContext.Provider value={{ account, setAccount }}>{children}</AccountContext.Provider>
   );
 };

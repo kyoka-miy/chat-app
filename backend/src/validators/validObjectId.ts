@@ -1,10 +1,10 @@
-import { registerDecorator, ValidationArguments, ValidationOptions } from "class-validator";
-import { ObjectId } from "mongodb";
+import { registerDecorator, ValidationArguments, ValidationOptions } from 'class-validator';
+import { ObjectId } from 'mongodb';
 
 export function ValidObjectId(validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
     registerDecorator({
-      name: "validObjectId",
+      name: 'validObjectId',
       target: object.constructor,
       propertyName,
       options: validationOptions,
@@ -13,9 +13,9 @@ export function ValidObjectId(validationOptions?: ValidationOptions) {
           return ObjectId.isValid(value);
         },
         defaultMessage(_args: ValidationArguments) {
-          return "$property must be a valid MongoDB ObjectId";
-        }
-      }
+          return '$property must be a valid MongoDB ObjectId';
+        },
+      },
     });
   };
 }

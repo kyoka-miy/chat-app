@@ -12,6 +12,6 @@ export const CONSTANTS = {
   LINK: {
     SIGN_UP: `/sign-up`,
     LOGIN: `/login`,
-    HOME: `/home`
+    HOME: `/home`,
   },
 };

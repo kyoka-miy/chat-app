@@ -1,11 +1,11 @@
-import { Server as SocketIOServer } from "socket.io";
-import { container } from "tsyringe";
-import { AddMessageUseCase } from "../../usecase/message/addMessageUseCase";
-import { ObjectId } from "mongodb";
-import { formatMessage } from "../../middlewares/messages";
-import { GetMessagesUseCase } from "../../usecase/message/getMessagesUseCase";
+import { Server as SocketIOServer } from 'socket.io';
+import { container } from 'tsyringe';
+import { AddMessageUseCase } from '../../usecase/message/addMessageUseCase';
+import { ObjectId } from 'mongodb';
+import { formatMessage } from '../../middlewares/messages';
+import { GetMessagesUseCase } from '../../usecase/message/getMessagesUseCase';
 
-const botName = "ChatBot";
+const botName = 'ChatBot';
 
 const users: { id: string; accountId: ObjectId; chatRoomId: ObjectId }[] = [];
 
@@ -28,14 +28,14 @@ function getRoomUsers(chatRoomId: ObjectId) {
 }
 
 export function setupSocket(io: SocketIOServer) {
-  io.on("connection", (socket) => {
+  io.on('connection', (socket) => {
     const account = socket.request.session?.account;
     if (!account) {
-      console.log("No account in session");
+      console.log('No account in session');
       return;
     }
 
-    socket.on("joinRoom", async (chatRoomId) => {
+    socket.on('joinRoom', async (chatRoomId) => {
       console.log(`User ${account.name} joined room ${chatRoomId}`);
       userJoin(socket.id, account._id, chatRoomId);
       socket.join(chatRoomId);
@@ -43,22 +43,19 @@ export function setupSocket(io: SocketIOServer) {
       try {
         const getMessagesUseCase = container.resolve(GetMessagesUseCase);
         const messages = await getMessagesUseCase.execute(chatRoomId);
-        socket.emit("joinRoom", { messages });
+        socket.emit('joinRoom', { messages });
       } catch (err) {
-        socket.emit("error", { message: "Failed to get messages" });
+        socket.emit('error', { message: 'Failed to get messages' });
       }
 
       socket.broadcast
         .to(chatRoomId)
-        .emit(
-          "message",
-          formatMessage(botName, `${account.name} has joined the chat!`)
-        );
+        .emit('message', formatMessage(botName, `${account.name} has joined the chat!`));
     });
 
-    socket.on("chatMessage", ({ text, chatRoomId }) => {
+    socket.on('chatMessage', ({ text, chatRoomId }) => {
       if (!text || !chatRoomId) return;
-      io.to(chatRoomId).emit("newMessage", {
+      io.to(chatRoomId).emit('newMessage', {
         text,
         sender: account,
         sentDateTime: new Date(),
@@ -67,14 +64,14 @@ export function setupSocket(io: SocketIOServer) {
       addMessageUseCase.execute(text, chatRoomId, account._id);
     });
 
-    socket.on("disconnect", () => {
+    socket.on('disconnect', () => {
       const user = userLeave(socket.id);
       if (user) {
         io.to(user.chatRoomId.toString()).emit(
-          "message",
+          'message',
           formatMessage(botName, `${user.chatRoomId} has left the chat.`)
         );
-        io.to(user.chatRoomId.toString()).emit("roomUsers", {
+        io.to(user.chatRoomId.toString()).emit('roomUsers', {
           room: user.chatRoomId,
           users: getRoomUsers(user.chatRoomId),
         });

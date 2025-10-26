@@ -1,9 +1,9 @@
-import { inject, injectable } from "tsyringe";
-import { IAccountRepository } from "../../repository/IAccountRepository";
-import { TOKENS } from "../../config/tokens";
-import { AppError } from "../../utils/appError";
-import { firebaseAdmin } from "../../firebaseAdmin";
-import { Account, IAccount } from "../../domain/model/accountModel";
+import { inject, injectable } from 'tsyringe';
+import { IAccountRepository } from '../../repository/IAccountRepository';
+import { TOKENS } from '../../config/tokens';
+import { AppError } from '../../utils/appError';
+import { firebaseAdmin } from '../../firebaseAdmin';
+import { Account, IAccount } from '../../domain/model/accountModel';
 
 @injectable()
 export class SignupUseCase {
@@ -16,11 +16,11 @@ export class SignupUseCase {
     const decodedToken = await firebaseAdmin.auth().verifyIdToken(idToken);
     const { email, name } = decodedToken;
     if (!email) {
-      throw new AppError("Email not found in token.", 400);
+      throw new AppError('Email not found in token.', 400);
     }
     let account = await this.accountRepo.findByEmail(email);
     if (account) {
-      throw new AppError("Account already exists", 409);
+      throw new AppError('Account already exists', 409);
     }
 
     const newAccount = new Account({

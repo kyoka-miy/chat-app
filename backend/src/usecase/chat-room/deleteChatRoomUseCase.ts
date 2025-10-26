@@ -1,8 +1,8 @@
-import { inject, injectable } from "tsyringe";
-import { ObjectId } from "mongodb";
-import { IChatRoomRepository } from "../../repository/IChatRoomRepository";
-import { TOKENS } from "../../config/tokens";
-import { IMessageRepository } from "../../repository/IMessageRepository";
+import { inject, injectable } from 'tsyringe';
+import { ObjectId } from 'mongodb';
+import { IChatRoomRepository } from '../../repository/IChatRoomRepository';
+import { TOKENS } from '../../config/tokens';
+import { IMessageRepository } from '../../repository/IMessageRepository';
 
 @injectable()
 export class DeleteChatRoomUseCase {

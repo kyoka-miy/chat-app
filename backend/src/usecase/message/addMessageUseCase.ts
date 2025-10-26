@@ -1,7 +1,7 @@
-import { inject, injectable } from "tsyringe";
-import { TOKENS } from "../../config/tokens";
-import { IMessageRepository } from "../../repository/IMessageRepository";
-import { ObjectId } from "mongodb";
+import { inject, injectable } from 'tsyringe';
+import { TOKENS } from '../../config/tokens';
+import { IMessageRepository } from '../../repository/IMessageRepository';
+import { ObjectId } from 'mongodb';
 
 @injectable()
 export class AddMessageUseCase {

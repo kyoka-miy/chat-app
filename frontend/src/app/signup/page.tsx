@@ -1,9 +1,9 @@
-"use client";
-import { auth } from "../../utils/firebase";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { CONSTANTS } from "@/utils/constants";
+'use client';
+import { auth } from '../../utils/firebase';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { CONSTANTS } from '@/utils/constants';
 
 const SignUpPage = () => {
   const router = useRouter();
@@ -11,7 +11,7 @@ const SignUpPage = () => {
   const handleGoogleSignUp = async () => {
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({
-      prompt: "select_account",
+      prompt: 'select_account',
     });
     try {
       const result = await signInWithPopup(auth, provider);
@@ -19,10 +19,10 @@ const SignUpPage = () => {
       const idToken = await user.getIdToken();
 
       const response = await fetch(CONSTANTS.ENDPOINT.AUTH_SIGNUP, {
-        method: "POST",
-        credentials: "include",
+        method: 'POST',
+        credentials: 'include',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ idToken, refreshToken: user.refreshToken }),
       });
@@ -30,10 +30,10 @@ const SignUpPage = () => {
       if (response.ok) {
         router.push(CONSTANTS.LINK.HOME);
       } else {
-        console.error("Authentication failed");
+        console.error('Authentication failed');
       }
     } catch (error) {
-      console.error("Failed to sign up with Google:", error);
+      console.error('Failed to sign up with Google:', error);
     }
   };
 
@@ -50,7 +50,7 @@ const SignUpPage = () => {
           Sign up with Google
         </button>
         <p className="text-center text-gray-600 dark:text-gray-300 text-sm">
-          Already have an account?{" "}
+          Already have an account?{' '}
           <Link href="/login" className="text-blue-500 hover:underline">
             Login
           </Link>

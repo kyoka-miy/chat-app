@@ -1,7 +1,7 @@
-import { injectable } from "inversify";
-import { Account, IAccount } from "../../domain/model/accountModel";
-import { IAccountRepository } from "../IAccountRepository";
-import { ObjectId } from "mongodb";
+import { injectable } from 'inversify';
+import { Account, IAccount } from '../../domain/model/accountModel';
+import { IAccountRepository } from '../IAccountRepository';
+import { ObjectId } from 'mongodb';
 
 @injectable()
 export class AccountRepository implements IAccountRepository {

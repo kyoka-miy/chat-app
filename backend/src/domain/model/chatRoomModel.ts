@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 export interface IChatRoom extends Document {
   name: string;
@@ -10,7 +10,7 @@ export interface IChatRoom extends Document {
 const chatRoomSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, "Chat room name is required"],
+    required: [true, 'Chat room name is required'],
   },
   createdDateTime: {
     type: Date,
@@ -19,16 +19,16 @@ const chatRoomSchema = new mongoose.Schema({
   accounts: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Account",
+      ref: 'Account',
       required: true,
     },
   ],
   messages: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Message",
+      ref: 'Message',
     },
   ],
 });
 
-export const ChatRoom = mongoose.model<IChatRoom>("ChatRoom", chatRoomSchema);
+export const ChatRoom = mongoose.model<IChatRoom>('ChatRoom', chatRoomSchema);

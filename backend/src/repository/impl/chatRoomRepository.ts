@@ -1,14 +1,14 @@
-import { ObjectId } from "mongodb";
-import { ChatRoom, IChatRoom } from "../../domain/model/chatRoomModel";
-import { IChatRoomRepository } from "../IChatRoomRepository";
-import { AppError } from "../../utils/appError";
+import { ObjectId } from 'mongodb';
+import { ChatRoom, IChatRoom } from '../../domain/model/chatRoomModel';
+import { IChatRoomRepository } from '../IChatRoomRepository';
+import { AppError } from '../../utils/appError';
 
 export class ChatRoomRepository implements IChatRoomRepository {
   async findAllByAccountId(accountId: ObjectId): Promise<IChatRoom[]> {
     return ChatRoom.find({ accounts: accountId })
       .populate({
-        path: "accounts",
-        select: "-chatRooms",
+        path: 'accounts',
+        select: '-chatRooms',
       })
       .sort({ createdDateTime: -1 })
       .exec();
@@ -28,7 +28,7 @@ export class ChatRoomRepository implements IChatRoomRepository {
       _id: chatRoomId,
     });
     if (!deletedChatRoom) {
-      throw new AppError("Chat room not found", 404);
+      throw new AppError('Chat room not found', 404);
     }
   }
 }

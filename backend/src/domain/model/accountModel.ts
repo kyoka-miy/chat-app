@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import validator from "validator";
+import mongoose from 'mongoose';
+import validator from 'validator';
 
 export interface IAccount extends Document {
   _id: mongoose.Types.ObjectId;
@@ -16,13 +16,13 @@ const accountSchema = new mongoose.Schema({
   },
   name: {
     type: String,
-    required: [true, "Name is required"],
+    required: [true, 'Name is required'],
   },
   email: {
     type: String,
-    required: [true, "Email is required"],
+    required: [true, 'Email is required'],
     unique: true,
-    validate: [validator.isEmail, "Please provide a valid email"],
+    validate: [validator.isEmail, 'Please provide a valid email'],
   },
   createdAt: {
     type: Date,
@@ -31,9 +31,9 @@ const accountSchema = new mongoose.Schema({
   chatRooms: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "ChatRoom",
+      ref: 'ChatRoom',
     },
-  ]
+  ],
 });
 
-export const Account = mongoose.model<IAccount>("Account", accountSchema);
+export const Account = mongoose.model<IAccount>('Account', accountSchema);

@@ -1,5 +1,5 @@
-import { ObjectId } from "mongodb";
-import { Account, IAccount } from "../domain/model/accountModel";
+import { ObjectId } from 'mongodb';
+import { Account, IAccount } from '../domain/model/accountModel';
 
 export interface IAccountRepository {
   findAllExceptMe(myAccountId: ObjectId): Promise<IAccount[]>;

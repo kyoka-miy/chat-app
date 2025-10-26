@@ -1,18 +1,16 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 type MessageInputProps = {
   onSend: (text: string) => void;
 };
 
-export const MessageInput: React.FC<MessageInputProps> = ({
-  onSend
-}) => {
-  const [text, setText] = useState("");
+export const MessageInput: React.FC<MessageInputProps> = ({ onSend }) => {
+  const [text, setText] = useState('');
 
   const handleSend = () => {
     if (text.trim()) {
       onSend(text);
-      setText("");
+      setText('');
     }
   };
 
@@ -23,7 +21,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
         placeholder="Write your message..."
         value={text}
         onChange={(e) => setText(e.target.value)}
-        onKeyDown={(e) => e.key === "Enter" && handleSend()}
+        onKeyDown={(e) => e.key === 'Enter' && handleSend()}
       />
       <button
         className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 text-sm cursor-pointer"

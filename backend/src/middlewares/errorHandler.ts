@@ -1,5 +1,5 @@
-import { ErrorRequestHandler } from "express";
-import { AppError } from "../utils/appError";
+import { ErrorRequestHandler } from 'express';
+import { AppError } from '../utils/appError';
 
 export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   if (err instanceof AppError) {
@@ -12,7 +12,7 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 
   console.error(err);
   res.status(500).json({
-    status: "error",
-    message: "Something went wrong",
+    status: 'error',
+    message: 'Something went wrong',
   });
 };

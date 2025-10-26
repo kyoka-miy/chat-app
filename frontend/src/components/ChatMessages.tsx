@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from "react";
-import { useAccount } from "../context/AccountContext";
-import { Message } from "@/utils/type";
+import React, { useEffect, useRef } from 'react';
+import { useAccount } from '../context/AccountContext';
+import { Message } from '@/utils/type';
 
 type ChatMessagesProps = {
   messages: Message[];
@@ -12,7 +12,7 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({ messages }) => {
 
   useEffect(() => {
     if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages]);
 
@@ -21,33 +21,22 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({ messages }) => {
       {messages.map((msg, index) => {
         const isOwn = msg.sender._id === account?._id;
         return (
-          <div
-            key={index}
-            className={`flex flex-col ${isOwn ? "items-end" : "items-start"}`}
-          >
-            {!isOwn && (
-              <span className="text-xs mb-1 text-gray-500">
-                {msg.sender.name}
-              </span>
-            )}
-            <div
-              className={`flex items-end gap-2 ${
-                isOwn ? "flex-row-reverse" : ""
-              }`}
-            >
+          <div key={index} className={`flex flex-col ${isOwn ? 'items-end' : 'items-start'}`}>
+            {!isOwn && <span className="text-xs mb-1 text-gray-500">{msg.sender.name}</span>}
+            <div className={`flex items-end gap-2 ${isOwn ? 'flex-row-reverse' : ''}`}>
               <div
                 className={`rounded px-3 py-2 text-sm max-w-xs break-words ${
                   isOwn
-                    ? "bg-green-400 text-white dark:bg-green-500"
-                    : "bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-gray-100"
+                    ? 'bg-green-400 text-white dark:bg-green-500'
+                    : 'bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-gray-100'
                 }`}
               >
                 {msg.text}
               </div>
               <span className="text-xs text-gray-400 select-none whitespace-nowrap">
                 {new Date(msg.sentDateTime).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
+                  hour: '2-digit',
+                  minute: '2-digit',
                 })}
               </span>
             </div>

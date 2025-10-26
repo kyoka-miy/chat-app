@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 export interface IMessage extends Document {
   text: string;
@@ -9,28 +9,28 @@ export interface IMessage extends Document {
 }
 
 const messageSchema = new mongoose.Schema({
-    text: {
-        type: String,
-        required: [true, "message content is required"],
-    },
-    sentDateTime: {
-        type: Date,
-        default: Date.now,
-    },
-    isRead: {
-        type: Boolean,
-        default: false,
-    },
-    sender: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Account",
-        required: true,
-    },
-    chatRoom: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "ChatRoom",
-        required: true,
-    }
+  text: {
+    type: String,
+    required: [true, 'message content is required'],
+  },
+  sentDateTime: {
+    type: Date,
+    default: Date.now,
+  },
+  isRead: {
+    type: Boolean,
+    default: false,
+  },
+  sender: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Account',
+    required: true,
+  },
+  chatRoom: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'ChatRoom',
+    required: true,
+  },
 });
 
-export const Message = mongoose.model<IMessage>("Message", messageSchema);
+export const Message = mongoose.model<IMessage>('Message', messageSchema);

@@ -1,7 +1,7 @@
-import { plainToInstance } from "class-transformer";
-import { validate } from "class-validator";
-import { Request, Response, NextFunction } from "express";
-import { AppError } from "../utils/appError";
+import { plainToInstance } from 'class-transformer';
+import { validate } from 'class-validator';
+import { Request, Response, NextFunction } from 'express';
+import { AppError } from '../utils/appError';
 
 export function validateDto<T extends object>(dtoClass: new () => T) {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -14,11 +14,9 @@ export function validateDto<T extends object>(dtoClass: new () => T) {
 
     if (errors.length > 0) {
       const messages = errors
-        .map((err) =>
-          err.constraints ? Object.values(err.constraints) : "Validation error"
-        )
+        .map((err) => (err.constraints ? Object.values(err.constraints) : 'Validation error'))
         .flat();
-      throw new AppError(messages.join(", "), 400);
+      throw new AppError(messages.join(', '), 400);
     }
     next();
   };

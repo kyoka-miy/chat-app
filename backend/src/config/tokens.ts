@@ -1,5 +1,5 @@
 export const TOKENS = {
-  AccountRepository: "IAccountRepository",
-  ChatRoomRepository: "IChatRoomRepository",
-  MessageRepository: "IMessageRepository",
+  AccountRepository: 'IAccountRepository',
+  ChatRoomRepository: 'IChatRoomRepository',
+  MessageRepository: 'IMessageRepository',
 };

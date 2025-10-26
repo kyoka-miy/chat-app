@@ -8,16 +8,16 @@ export class AppError extends Error {
     this.statusCode = statusCode;
     this.status =
       statusCode === 400
-        ? "Bad Request"
+        ? 'Bad Request'
         : statusCode === 401
-        ? "Unauthorized"
-        : statusCode === 403
-        ? "Forbidden"
-        : statusCode === 404
-        ? "Not Found"
-        : statusCode === 500
-        ? "Internal Server Error"
-        : "Error";
+          ? 'Unauthorized'
+          : statusCode === 403
+            ? 'Forbidden'
+            : statusCode === 404
+              ? 'Not Found'
+              : statusCode === 500
+                ? 'Internal Server Error'
+                : 'Error';
     this.isOperational = isOperational;
 
     Error.captureStackTrace(this, this.constructor);

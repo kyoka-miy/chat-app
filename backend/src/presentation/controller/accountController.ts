@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
-import { autoInjectable } from "tsyringe";
-import { catchAsync } from "../../middlewares/catchAsync";
-import { GetAccountsUseCase } from "../../usecase/account/GetAccountsUseCase";
-import { AppError } from "../../utils/appError";
+import { Request, Response } from 'express';
+import { autoInjectable } from 'tsyringe';
+import { catchAsync } from '../../middlewares/catchAsync';
+import { GetAccountsUseCase } from '../../usecase/account/GetAccountsUseCase';
+import { AppError } from '../../utils/appError';
 
 @autoInjectable()
 export class AccountController {
@@ -11,7 +11,7 @@ export class AccountController {
   getAccount = catchAsync(async (req: Request, res: Response) => {
     const account = req.account;
     if (!account) {
-      throw new AppError("Account not found in session", 404);
+      throw new AppError('Account not found in session', 404);
     }
     res.status(200).json(account);
   });
@@ -20,7 +20,7 @@ export class AccountController {
   getAccounts = catchAsync(async (req: Request, res: Response) => {
     const account = req.account;
     if (!account) {
-      throw new AppError("Account not found in session", 404);
+      throw new AppError('Account not found in session', 404);
     }
     const accounts = await this.getAccountsUsecase.execute(account._id);
     res.status(200).json(accounts);

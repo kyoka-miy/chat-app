@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import { CONSTANTS } from "./utils/constants";
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { CONSTANTS } from './utils/constants';
 
 // Redirect to login page if no valid tokens or session
 export async function middleware(request: NextRequest) {
@@ -8,9 +8,9 @@ export async function middleware(request: NextRequest) {
   const unprotectedPaths = [CONSTANTS.LINK.LOGIN, CONSTANTS.LINK.SIGN_UP];
   const { pathname } = request.nextUrl;
 
-  const idTokenFromCookie = request.cookies.get("idToken");
-  const refreshTokenFromCookie = request.cookies.get("refreshToken");
-  const session = request.cookies.get("session");
+  const idTokenFromCookie = request.cookies.get('idToken');
+  const refreshTokenFromCookie = request.cookies.get('refreshToken');
+  const session = request.cookies.get('session');
 
   // If the user is trying to access an unprotected path (login or signup),
   // and they have valid tokens, redirect them to the home page.
