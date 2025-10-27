@@ -6,4 +6,5 @@ export interface IAccountRepository {
   findByIds(accountIds: ObjectId[]): Promise<IAccount[]>;
   findByEmail(email: string): Promise<IAccount | null>;
   insert(account: IAccount): Promise<IAccount>;
+  addFriend(myAccountId: ObjectId, friend: IAccount): Promise<IAccount>;
 }

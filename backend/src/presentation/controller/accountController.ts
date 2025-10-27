@@ -1,12 +1,13 @@
 import { Request, Response } from 'express';
 import { autoInjectable } from 'tsyringe';
 import { catchAsync } from '../../middlewares/catchAsync';
-import { GetAccountsUseCase } from '../../usecase/account/GetAccountsUseCase';
+import { AccountUseCase } from '../../usecase/account/accountUseCase';
 import { AppError } from '../../utils/appError';
+import { IsEmail } from 'class-validator';
 
 @autoInjectable()
 export class AccountController {
-  constructor(private getAccountsUsecase: GetAccountsUseCase) {}
+  constructor(private accountUsecase: AccountUseCase) {}
 
   getAccount = catchAsync(async (req: Request, res: Response) => {
     const account = req.account;
@@ -16,13 +17,27 @@ export class AccountController {
     res.status(200).json(account);
   });
 
-  // TODO: fetch only followed accounts, add pagination, search, etc.
   getAccounts = catchAsync(async (req: Request, res: Response) => {
     const account = req.account;
     if (!account) {
       throw new AppError('Account not found in session', 404);
     }
-    const accounts = await this.getAccountsUsecase.execute(account._id);
+    const accounts = await this.accountUsecase.getAccounts(account._id);
     res.status(200).json(accounts);
   });
+
+  addFriend = catchAsync(async (req: Request, res: Response) => {
+    const accountId = req.account?._id;
+    if (!accountId) {
+      res.status(400).json({ message: 'Account ID is not set in session' });
+      return;
+    }
+    const account = await this.accountUsecase.addFriendByEmail(accountId, req.params.email);
+    res.status(201).json(account);
+  });
+}
+
+export class AddFriendDto {
+  @IsEmail({}, { message: 'Invalid email format' })
+  email!: string;
 }

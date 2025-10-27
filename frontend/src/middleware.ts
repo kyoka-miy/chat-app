@@ -10,7 +10,7 @@ export async function middleware(request: NextRequest) {
 
   const idTokenFromCookie = request.cookies.get('idToken');
   const refreshTokenFromCookie = request.cookies.get('refreshToken');
-  const session = request.cookies.get('session');
+  const session = request.cookies.get('connect.sid');
 
   // If the user is trying to access an unprotected path (login or signup),
   // and they have valid tokens, redirect them to the home page.
@@ -24,7 +24,7 @@ export async function middleware(request: NextRequest) {
   // If the user is trying to access a protected path (home),
   // and they do not have valid refresh token, redirect them to the login page.
   if (protectedPaths.some((path) => pathname.startsWith(path))) {
-    if (!refreshTokenFromCookie) {
+    if (!refreshTokenFromCookie || !session) {
       const loginUrl = new URL(CONSTANTS.LINK.LOGIN, request.url);
       return NextResponse.redirect(loginUrl);
     }

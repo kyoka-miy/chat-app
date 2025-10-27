@@ -20,8 +20,7 @@ export class ChatRoomController {
   getChatRooms = catchAsync(async (req: Request, res: Response) => {
     const accountId = req.account?._id;
     if (!accountId) {
-      res.status(400).json({ message: 'Account ID is not set in session' });
-      return;
+      throw new AppError('Account ID is not set in session', 404);
     }
     const chatRooms = await this.getChatRoomsUseCase.execute(accountId);
     res.status(200).json(chatRooms);
