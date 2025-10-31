@@ -14,8 +14,8 @@ export class AccountRepository implements IAccountRepository {
     return Account.find({ _id: { $in: accountIds } }).exec();
   }
 
-  async findByEmail(email: string): Promise<IAccount | null> {
-    return Account.findOne({ email }).exec();
+  async findByUserId(userId: string): Promise<IAccount | null> {
+    return Account.findOne({ userId }).exec();
   }
 
   async insert(account: IAccount): Promise<IAccount> {

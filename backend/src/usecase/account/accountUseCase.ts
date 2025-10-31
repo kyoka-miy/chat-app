@@ -12,14 +12,16 @@ export class AccountUseCase {
     return this.accountRepo.findAllExceptMe(myAccountId);
   }
 
-  async addFriendByEmail(myAccountId: ObjectId, email: string) {
-    const friend = await this.accountRepo.findByEmail(email);
+  async addFriendByUserId(myAccountId: ObjectId, userId: string) {
+    const friend = await this.accountRepo.findByUserId(userId);
     if (!friend) {
-      throw new AppError('Account with the provided email does not exist', 404);
+      throw new AppError('Account with the provided userId does not exist', 404);
     }
     if (friend._id.equals(myAccountId)) {
       throw new AppError('Cannot add yourself as a friend', 400);
     }
     return this.accountRepo.addFriend(myAccountId, friend);
   }
+
+  async searchAccounts(searchText: string) {}
 }

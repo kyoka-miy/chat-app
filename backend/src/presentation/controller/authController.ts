@@ -40,6 +40,7 @@ export class AuthController {
     res.status(200).json({ message: 'Authentication success', account: account });
   });
 
+  //   Add user with userId and email
   signup = catchAsync(async (req: Request, res: Response) => {
     const { idToken, refreshToken } = req.body;
     const account = await this.signupUseCase.execute(idToken);

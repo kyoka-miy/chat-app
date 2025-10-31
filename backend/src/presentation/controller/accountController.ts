@@ -32,12 +32,17 @@ export class AccountController {
       res.status(400).json({ message: 'Account ID is not set in session' });
       return;
     }
-    const account = await this.accountUsecase.addFriendByEmail(accountId, req.params.email);
+    const account = await this.accountUsecase.addFriendByUserId(accountId, req.params.userId);
     res.status(201).json(account);
+  });
+
+  searchAccounts = catchAsync(async (req: Request, res: Response) => {
+    const query = req.params.searchText;
+    const accounts = await this.accountUsecase.searchAccounts(query);
+    res.status(200).json(accounts);
   });
 }
 
 export class AddFriendDto {
-  @IsEmail({}, { message: 'Invalid email format' })
-  email!: string;
+  userId!: string;
 }
