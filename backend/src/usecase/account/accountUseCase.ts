@@ -23,5 +23,16 @@ export class AccountUseCase {
     return this.accountRepo.addFriend(myAccountId, friend);
   }
 
-  async searchAccounts(searchText: string) {}
+  async searchAccounts(myAccountId: ObjectId, searchText: string) {
+    const allAccounts = await this.accountRepo.findAllExceptMe(myAccountId);
+    const lowerSearchText = searchText.toLowerCase().trim();
+    return lowerSearchText.length > 0
+      ? allAccounts.filter(
+          (account) =>
+            account.name.toLowerCase().includes(lowerSearchText) ||
+            // FIXME: once all userId filled, remove the check
+            (account.userId && account.userId.toLowerCase().includes(lowerSearchText))
+        )
+      : [];
+  }
 }

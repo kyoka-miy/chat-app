@@ -6,6 +6,7 @@ import { SignupUseCase } from '../../usecase/auth/signupUseCase';
 import { firebaseAdmin } from '../../firebaseAdmin';
 import { IsNotEmpty, IsString } from 'class-validator';
 import { AppError } from '../../utils/appError';
+import { IAccount } from '../../domain/model/accountModel';
 
 @autoInjectable()
 export class AuthController {
@@ -18,52 +19,15 @@ export class AuthController {
     const { idToken, refreshToken } = req.body;
     const account = await this.loginUsecase.execute(idToken);
 
-    // Set idToken in httpOnly cookie
-    res.cookie('idToken', idToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
-    });
-    // Set refreshToken in httpOnly cookie if present in request
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-    });
-
-    // Store account info in session
-    if (req.session) {
-      req.session.account = account;
-    }
+    this.setTokenAndSession(res, idToken, refreshToken, req, account);
     res.status(200).json({ message: 'Authentication success', account: account });
   });
-
-  //   Add user with userId and email
+// FIXME: Add userId and name
   signup = catchAsync(async (req: Request, res: Response) => {
     const { idToken, refreshToken } = req.body;
     const account = await this.signupUseCase.execute(idToken);
 
-    // Set idToken in httpOnly cookie
-    res.cookie('idToken', idToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
-    });
-    // Set refreshToken in httpOnly cookie if present in request
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-    });
-
-    // Store account info in session
-    if (req.session) {
-      req.session.account = account;
-    }
+    this.setTokenAndSession(res, idToken, refreshToken, req, account);
     res.status(201).json({ message: 'Account created', account: account });
   });
 
@@ -123,6 +87,34 @@ export class AuthController {
 
     res.status(200).json({ message: 'Refresh token success' });
   });
+
+  private setTokenAndSession(
+    res: Response,
+    idToken: any,
+    refreshToken: any,
+    req: Request,
+    account: IAccount
+  ) {
+    res.cookie('idToken', idToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+    });
+
+    // Set refreshToken in httpOnly cookie if present in request
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    });
+
+    // Store account info in session
+    if (req.session) {
+      req.session.account = account;
+    }
+  }
 }
 
 export class AuthenticationDto {

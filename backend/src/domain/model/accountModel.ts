@@ -49,4 +49,11 @@ const accountSchema = new mongoose.Schema({
   ],
 });
 
+accountSchema.pre('save', function (next) {
+  if (!this.userId && this._id) {
+    this.userId = this._id.toString();
+  }
+  next();
+});
+
 export const Account = mongoose.model<IAccount>('Account', accountSchema);

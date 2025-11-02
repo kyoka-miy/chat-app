@@ -3,7 +3,7 @@ import { autoInjectable } from 'tsyringe';
 import { catchAsync } from '../../middlewares/catchAsync';
 import { AccountUseCase } from '../../usecase/account/accountUseCase';
 import { AppError } from '../../utils/appError';
-import { IsEmail } from 'class-validator';
+import { IsEmail, IsString, IsNotEmpty } from 'class-validator';
 
 @autoInjectable()
 export class AccountController {
@@ -37,12 +37,23 @@ export class AccountController {
   });
 
   searchAccounts = catchAsync(async (req: Request, res: Response) => {
-    const query = req.params.searchText;
-    const accounts = await this.accountUsecase.searchAccounts(query);
+    const accountId = req.account?._id;
+    if (!accountId) {
+      res.status(400).json({ message: 'Account ID is not set in session' });
+      return;
+    }
+    const searchText = req.params.searchText;
+
+    const accounts = await this.accountUsecase.searchAccounts(accountId, searchText);
     res.status(200).json(accounts);
   });
 }
 
 export class AddFriendDto {
   userId!: string;
+}
+
+export class SearchAccountsDto {
+  @IsString()
+  searchText!: string;
 }
