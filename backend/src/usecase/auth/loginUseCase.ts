@@ -18,8 +18,7 @@ export class LoginUseCase {
     if (!email) {
       throw new AppError('Email not found in token.', 400);
     }
-    const account = await this.accountRepo.findByUserId(email);
-
+    const account = await this.accountRepo.findByEmail(email);
     if (!account) {
       throw new AppError('Account not found. Please sign up first.', 404);
     }

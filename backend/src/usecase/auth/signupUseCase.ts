@@ -18,7 +18,7 @@ export class SignupUseCase {
     if (!email) {
       throw new AppError('Email not found in token.', 400);
     }
-    let account = await this.accountRepo.findByUserId(email);
+    let account = await this.accountRepo.findByEmail(email);
     if (account) {
       throw new AppError('Account already exists', 409);
     }

@@ -4,7 +4,8 @@ import { Account, IAccount } from '../domain/model/accountModel';
 export interface IAccountRepository {
   findAllExceptMe(myAccountId: ObjectId): Promise<IAccount[]>;
   findByIds(accountIds: ObjectId[]): Promise<IAccount[]>;
-  findByUserId(email: string): Promise<IAccount | null>;
+  findByUserId(userId: string): Promise<IAccount | null>;
+  findByEmail(email: string): Promise<IAccount | null>;
   insert(account: IAccount): Promise<IAccount>;
   addFriend(myAccountId: ObjectId, friend: IAccount): Promise<IAccount>;
 }

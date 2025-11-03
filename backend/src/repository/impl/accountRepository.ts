@@ -18,6 +18,10 @@ export class AccountRepository implements IAccountRepository {
     return Account.findOne({ userId }).exec();
   }
 
+  async findByEmail(email: string): Promise<IAccount | null> {
+    return Account.findOne({ email }).exec();
+  }
+
   async insert(account: IAccount): Promise<IAccount> {
     const newAccount = new Account(account);
     return newAccount.save();
