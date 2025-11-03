@@ -1,3 +1,5 @@
+// FIXME: Add error handling
+
 export async function useGet(url: string) {
   const res = await fetch(url, {
     credentials: 'include',

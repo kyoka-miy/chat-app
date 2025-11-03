@@ -22,7 +22,7 @@ export class AuthController {
     this.setTokenAndSession(res, idToken, refreshToken, req, account);
     res.status(200).json({ message: 'Authentication success', account: account });
   });
-// FIXME: Add userId and name
+  // FIXME: Add userId and name
   signup = catchAsync(async (req: Request, res: Response) => {
     const { idToken, refreshToken } = req.body;
     const account = await this.signupUseCase.execute(idToken);

@@ -10,11 +10,14 @@ import { CONSTANTS } from '@/utils/constants';
 import { ChatRoom, Message } from '@/utils/type';
 import { ChatMessages } from '@/components/ChatMessages';
 import { Sidebar } from '@/components/Sidebar';
+import { IconSidebar } from '@/components/IconSidebar';
+import { FriendsSidebar } from '@/components/FriendsSidebar';
 
 export default function Home() {
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
   const [currentChatRoomId, setCurrentChatRoomId] = useState<string>('');
   const [messages, setMessages] = useState<{ [roomId: string]: Message[] }>({});
+  const [sidebarType, setSidebarType] = useState<'friends' | 'chat'>('friends');
   const { account } = useAccount();
 
   useEffect(() => {
@@ -66,11 +69,16 @@ export default function Home() {
 
   return (
     <div className="flex h-screen">
-      <Sidebar
-        rooms={chatRooms}
-        currentRoomId={currentChatRoomId}
-        onSelectRoom={setCurrentChatRoomId}
-      />
+      <IconSidebar selected={sidebarType} onSelect={setSidebarType} />
+      {sidebarType === 'chat' ? (
+        <Sidebar
+          rooms={chatRooms}
+          currentRoomId={currentChatRoomId}
+          onSelectRoom={setCurrentChatRoomId}
+        />
+      ) : (
+        <FriendsSidebar />
+      )}
       <div className="flex flex-col flex-1">
         <div className="flex justify-between items-center p-4 border-b">
           <>
