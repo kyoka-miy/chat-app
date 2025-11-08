@@ -95,7 +95,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ rooms, currentRoomId, onSelect
         ))}
       </ul>
       {deleteModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-50">
           <div className="bg-white dark:bg-gray-800 p-6 rounded shadow-lg w-80">
             <h3 className="text-lg font-semibold mb-4">Confirm Deletion</h3>
             <p className="mb-4">

@@ -8,6 +8,10 @@ export const FriendsSidebar: React.FC = () => {
   const { account } = useAccount();
   const [searchText, setSearchText] = useState('');
   const [friends, setFriends] = useState<Account[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalSearch, setModalSearch] = useState('');
+  const [searchResult, setSearchResult] = useState<Account | null>(null);
+  const [searching, setSearching] = useState(false);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -19,6 +23,19 @@ export const FriendsSidebar: React.FC = () => {
       clearTimeout(handler);
     };
   }, [searchText]);
+
+  useEffect(() => {
+    if (!isModalOpen || !modalSearch) {
+      setSearchResult(null);
+      return;
+    }
+    setSearching(true);
+    useGet(CONSTANTS.ENDPOINT.ACCOUNTS_SEARCH(modalSearch)).then((data) => {
+      const found = Array.isArray(data) ? data.find((a: Account) => a._id === modalSearch) : null;
+      setSearchResult(found || null);
+      setSearching(false);
+    });
+  }, [modalSearch, isModalOpen]);
 
   return (
     <aside className="w-56 bg-gray-100 dark:bg-gray-800 h-full p-4 flex flex-col gap-2 border-r">
@@ -43,15 +60,67 @@ export const FriendsSidebar: React.FC = () => {
       <div className="flex-1 overflow-y-auto">
         <ul className="space-y-2">
           {friends.map((f) => (
-            <li key={f._id} className="px-3 py-2 rounded bg-gray-200 dark:bg-gray-700">
+            <li
+              key={f._id}
+              className="px-3 py-2 rounded bg-gray-200 dark:bg-gray-700 hover:cursor-pointer"
+            >
               {f.name}
             </li>
           ))}
         </ul>
       </div>
-      <button className="mt-2 px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600">
+      <button
+        className="mt-2 px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600 hover:cursor-pointer"
+        onClick={() => setIsModalOpen(true)}
+      >
         Add Friends ＋
       </button>
+      {isModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
+          onClick={() => {
+            setIsModalOpen(false);
+            setModalSearch('');
+            setSearchResult(null);
+          }}
+        >
+          <div
+            className="bg-white dark:bg-gray-800 p-6 rounded shadow-lg w-80 relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 hover:cursor-pointer"
+              onClick={() => {
+                setIsModalOpen(false);
+                setModalSearch('');
+                setSearchResult(null);
+              }}
+            >
+              ×
+            </button>
+            <h2 className="text-lg font-bold mb-4">Add Friend</h2>
+            <input
+              type="text"
+              className="w-full px-3 py-2 rounded border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 mb-4"
+              placeholder="Search Friend by ID"
+              value={modalSearch}
+              onChange={(e) => setModalSearch(e.target.value)}
+            />
+            <div>
+              {searching ? (
+                <span className="text-gray-500">Searching...</span>
+              ) : searchResult ? (
+                <div className="p-3 rounded bg-gray-200 dark:bg-gray-700">
+                  <span className="font-bold">{searchResult.name}</span> <br />
+                  <span className="text-xs text-gray-500">ID: {searchResult._id}</span>
+                </div>
+              ) : (
+                <span className="text-gray-500">No Result</span>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </aside>
   );
 };
