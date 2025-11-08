@@ -42,7 +42,7 @@ export class AccountController {
       res.status(400).json({ message: 'Account ID is not set in session' });
       return;
     }
-    const searchText = req.params.searchText;
+    const searchText = req.query.searchText as string;
 
     const accounts = await this.accountUsecase.searchAccounts(accountId, searchText);
     res.status(200).json(accounts);

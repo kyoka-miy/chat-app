@@ -16,16 +16,11 @@ const accountController = container.resolve(AccountController);
 accountRouter.get('/me', authenticateIdToken, accountController.getAccount);
 accountRouter.get('/', authenticateIdToken, accountController.getAccounts);
 accountRouter.post(
-  '/friends/:email',
+  '/friends/:userId',
   authenticateIdToken,
   validateDto(AddFriendDto),
   accountController.addFriend
 );
-accountRouter.get(
-  '/search/:searchText',
-  authenticateIdToken,
-  validateDto(SearchAccountsDto),
-  accountController.searchAccounts
-);
+accountRouter.get('/search', authenticateIdToken, accountController.searchAccounts);
 
 export default accountRouter;

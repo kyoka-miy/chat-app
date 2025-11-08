@@ -8,6 +8,8 @@ export const CONSTANTS = {
     CHAT_ROOM: (chatRoomId: string) => `${endpointBase}/chat-rooms/${chatRoomId}`,
     ACCOUNT_ME: `${endpointBase}/accounts/me`,
     ACCOUNTS: `${endpointBase}/accounts`,
+    ACCOUNTS_SEARCH: (searchText: string) =>
+      `${endpointBase}/accounts/search?searchText=${encodeURIComponent(searchText)}`,
   },
   LINK: {
     SIGN_UP: `/sign-up`,

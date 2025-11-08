@@ -9,9 +9,12 @@ export type Message = {
 
 export type Account = {
   _id: string;
+  userId: string;
   name: string;
   email: string;
   createdAt: Date;
+  chatRooms: string[];
+  friends: Account[];
 };
 
 export type ChatRoom = {

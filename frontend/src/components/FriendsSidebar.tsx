@@ -1,16 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAccount } from '@/context/AccountContext';
+import { useGet } from '@/utils/api';
+import { CONSTANTS } from '@/utils/constants';
+import { Account } from '@/utils/type';
 
 export const FriendsSidebar: React.FC = () => {
   const { account } = useAccount();
-  const [search, setSearch] = useState('');
-  // TODO: Replace with actual friends data
-  const friends = [
-    { id: '1', name: 'Alice' },
-    { id: '2', name: 'Bob' },
-    { id: '3', name: 'Charlie' },
-  ];
-  const filtered = friends.filter((f) => f.name.toLowerCase().includes(search.toLowerCase()));
+  const [searchText, setSearchText] = useState('');
+  const [friends, setFriends] = useState<Account[]>([]);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      useGet(CONSTANTS.ENDPOINT.ACCOUNTS_SEARCH(searchText)).then((data) => {
+        setFriends(data);
+      });
+    }, 500);
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchText]);
 
   return (
     <aside className="w-56 bg-gray-100 dark:bg-gray-800 h-full p-4 flex flex-col gap-2 border-r">
@@ -28,14 +36,14 @@ export const FriendsSidebar: React.FC = () => {
           type="text"
           className="w-full px-3 py-2 rounded border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900"
           placeholder="Search friends..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
         />
       </div>
       <div className="flex-1 overflow-y-auto">
         <ul className="space-y-2">
-          {filtered.map((f) => (
-            <li key={f.id} className="px-3 py-2 rounded bg-gray-200 dark:bg-gray-700">
+          {friends.map((f) => (
+            <li key={f._id} className="px-3 py-2 rounded bg-gray-200 dark:bg-gray-700">
               {f.name}
             </li>
           ))}

@@ -8,7 +8,7 @@ export interface IAccount extends Document {
   email: string;
   createdAt: Date;
   chatRooms: mongoose.Types.ObjectId[];
-  friends: IAccount[];
+  friends: mongoose.Types.ObjectId[];
 }
 
 const accountSchema = new mongoose.Schema({

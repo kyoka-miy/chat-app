@@ -19,7 +19,7 @@ export class AccountRepository implements IAccountRepository {
   }
 
   async findByEmail(email: string): Promise<IAccount | null> {
-    return Account.findOne({ email }).exec();
+    return Account.findOne({ email }).populate('friends').exec();
   }
 
   async insert(account: IAccount): Promise<IAccount> {
