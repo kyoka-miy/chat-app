@@ -9,9 +9,8 @@ export const FriendsSidebar: React.FC = () => {
   const [searchText, setSearchText] = useState('');
   const [friends, setFriends] = useState<Account[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalSearch, setModalSearch] = useState('');
-  const [searchResult, setSearchResult] = useState<Account | null>(null);
-  const [searching, setSearching] = useState(false);
+  const [userIdInput, setUserIdInput] = useState('');
+  const [newFriendSuggest, setNewFriendSuggest] = useState<Account | null>(null);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -25,17 +24,16 @@ export const FriendsSidebar: React.FC = () => {
   }, [searchText]);
 
   useEffect(() => {
-    if (!isModalOpen || !modalSearch) {
-      setSearchResult(null);
-      return;
-    }
-    setSearching(true);
-    useGet(CONSTANTS.ENDPOINT.ACCOUNTS_SEARCH(modalSearch)).then((data) => {
-      const found = Array.isArray(data) ? data.find((a: Account) => a._id === modalSearch) : null;
-      setSearchResult(found || null);
-      setSearching(false);
-    });
-  }, [modalSearch, isModalOpen]);
+    if (userIdInput.trim().length === 0) return;
+    const handler = setTimeout(() => {
+      useGet(CONSTANTS.ENDPOINT.ACCOUNT_FIND_BY_ID(userIdInput)).then((data) => {
+        setNewFriendSuggest(data);
+      });
+    }, 500);
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [userIdInput]);
 
   return (
     <aside className="w-56 bg-gray-100 dark:bg-gray-800 h-full p-4 flex flex-col gap-2 border-r">
@@ -80,8 +78,8 @@ export const FriendsSidebar: React.FC = () => {
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
           onClick={() => {
             setIsModalOpen(false);
-            setModalSearch('');
-            setSearchResult(null);
+            setUserIdInput('');
+            // setFriend(null);
           }}
         >
           <div
@@ -92,27 +90,25 @@ export const FriendsSidebar: React.FC = () => {
               className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 hover:cursor-pointer"
               onClick={() => {
                 setIsModalOpen(false);
-                setModalSearch('');
-                setSearchResult(null);
+                setUserIdInput('');
+                // setFriend(null);
               }}
             >
               ×
             </button>
-            <h2 className="text-lg font-bold mb-4">Add Friend</h2>
+            <h2 className="text-lg font-bold mb-4">Invite New Friend</h2>
             <input
               type="text"
               className="w-full px-3 py-2 rounded border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 mb-4"
-              placeholder="Search Friend by ID"
-              value={modalSearch}
-              onChange={(e) => setModalSearch(e.target.value)}
+              placeholder="Find a new friend by id..."
+              value={userIdInput}
+              onChange={(e) => setUserIdInput(e.target.value)}
             />
             <div>
-              {searching ? (
-                <span className="text-gray-500">Searching...</span>
-              ) : searchResult ? (
-                <div className="p-3 rounded bg-gray-200 dark:bg-gray-700">
-                  <span className="font-bold">{searchResult.name}</span> <br />
-                  <span className="text-xs text-gray-500">ID: {searchResult._id}</span>
+              {newFriendSuggest ? (
+                <div className="p-3 rounded bg-gray-200 dark:bg-grday-700 hover:cursor-pointer">
+                  <span className="font-bold text-gray-500">{newFriendSuggest.name}</span> <br />
+                  <span className="text-xs text-gray-500">ID: {newFriendSuggest.userId}</span>
                 </div>
               ) : (
                 <span className="text-gray-500">No Result</span>

@@ -22,7 +22,7 @@ export class AccountUseCase {
     }
     return this.accountRepo.addFriend(myAccountId, friend);
   }
-
+  //FIXME: Search from friends only, not all accounts
   async searchAccounts(myAccountId: ObjectId, searchText: string) {
     const allAccounts = await this.accountRepo.findAllExceptMe(myAccountId);
     const lowerSearchText = searchText.toLowerCase().trim();
@@ -32,5 +32,13 @@ export class AccountUseCase {
         // FIXME: once all userId filled, remove the check
         (account.userId && account.userId.toLowerCase().includes(lowerSearchText))
     );
+  }
+
+  async searchAccountById(myAccountId: ObjectId, userId: string) {
+    console.log('Searching for userId:', userId);
+    if (!userId || userId.length === 0) {
+      return null;
+    }
+    return this.accountRepo.findByUserIdExceptMeAndFriends(myAccountId, userId.trim());
   }
 }

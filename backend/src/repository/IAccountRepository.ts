@@ -8,4 +8,5 @@ export interface IAccountRepository {
   findByEmail(email: string): Promise<IAccount | null>;
   insert(account: IAccount): Promise<IAccount>;
   addFriend(myAccountId: ObjectId, friend: IAccount): Promise<IAccount>;
+  findByUserIdExceptMeAndFriends(myAccountId: ObjectId, userId: string): Promise<IAccount | null>;
 }

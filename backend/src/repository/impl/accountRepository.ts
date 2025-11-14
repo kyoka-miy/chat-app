@@ -33,4 +33,18 @@ export class AccountRepository implements IAccountRepository {
     if (!updatedAccount) throw new AppError('Account not found', 404);
     return updatedAccount;
   }
+
+  async findByUserIdExceptMeAndFriends(
+    myAccountId: ObjectId,
+    userId: string
+  ): Promise<IAccount | null> {
+    const myAccount = await Account.findById(myAccountId).populate('friends').exec();
+    if (!myAccount) throw new AppError('Your account not found', 404);
+    const friendIds = myAccount.friends?.map((f: any) => f._id) || [];
+    // find accounts whose userId matches, excluding myself and my friends
+    return Account.findOne({
+      userId,
+      _id: { $ne: myAccountId, $nin: friendIds },
+    }).exec();
+  }
 }

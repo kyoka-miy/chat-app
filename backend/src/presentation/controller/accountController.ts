@@ -36,7 +36,7 @@ export class AccountController {
     res.status(201).json(account);
   });
 
-  searchAccounts = catchAsync(async (req: Request, res: Response) => {
+  searchAccountsBySearchText = catchAsync(async (req: Request, res: Response) => {
     const accountId = req.account?._id;
     if (!accountId) {
       res.status(400).json({ message: 'Account ID is not set in session' });
@@ -47,9 +47,22 @@ export class AccountController {
     const accounts = await this.accountUsecase.searchAccounts(accountId, searchText);
     res.status(200).json(accounts);
   });
+
+  findAccountById = catchAsync(async (req: Request, res: Response) => {
+    const accountId = req.account?._id;
+    if (!accountId) {
+      res.status(400).json({ message: 'Account ID is not set in session' });
+      return;
+    }
+
+    const accounts = await this.accountUsecase.searchAccountById(accountId, req.params.userId);
+    res.status(200).json(accounts);
+  });
 }
 
-export class AddFriendDto {
+export class UserIdDto {
+  @IsString()
+  @IsNotEmpty()
   userId!: string;
 }
 
