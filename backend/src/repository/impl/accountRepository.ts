@@ -14,6 +14,12 @@ export class AccountRepository implements IAccountRepository {
     return Account.find({ _id: { $in: accountIds } }).exec();
   }
 
+  async findById(accountId: ObjectId): Promise<IAccount> {
+    const account = await Account.findById(accountId).populate('friends').exec();
+    if (!account) throw new AppError('Account not found', 404);
+    return account;
+  }
+
   async findByUserId(userId: string): Promise<IAccount | null> {
     return Account.findOne({ userId }).exec();
   }
@@ -27,11 +33,9 @@ export class AccountRepository implements IAccountRepository {
     return newAccount.save();
   }
 
-  async addFriend(myAccountId: ObjectId, friend: IAccount): Promise<IAccount> {
+  async addFriend(myAccountId: ObjectId, friend: IAccount): Promise<void> {
     await Account.updateOne({ _id: myAccountId }, { $addToSet: { friends: friend._id } }).exec();
-    const updatedAccount = await Account.findById(myAccountId).populate('friends').exec();
-    if (!updatedAccount) throw new AppError('Account not found', 404);
-    return updatedAccount;
+    await Account.updateOne({ _id: friend._id }, { $addToSet: { friends: myAccountId } }).exec();
   }
 
   async findByUserIdExceptMeAndFriends(

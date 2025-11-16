@@ -20,7 +20,12 @@ export class AccountUseCase {
     if (friend._id.equals(myAccountId)) {
       throw new AppError('Cannot add yourself as a friend', 400);
     }
-    return this.accountRepo.addFriend(myAccountId, friend);
+    const myAccount = await this.accountRepo.findById(myAccountId);
+    if (myAccount.friends?.some((f: any) => f._id.equals(friend._id))) {
+      throw new AppError('This account is already your friend', 400);
+    }
+    this.accountRepo.addFriend(myAccountId, friend);
+    return;
   }
   //FIXME: Search from friends only, not all accounts
   async searchAccounts(myAccountId: ObjectId, searchText: string) {

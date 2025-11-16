@@ -19,6 +19,14 @@ export const AddNewFriendModal: React.FC<Props> = ({
   searchError,
   newFriendSuggest,
 }) => {
+  const addFrield = async (friendId: string) => {
+    await fetch(`/api/accounts/add-friend/${friendId}`, {
+      method: 'POST',
+    });
+    setIsModalOpen(false);
+    setUserIdInput('');
+    window.location.reload();
+  };
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
@@ -59,7 +67,12 @@ export const AddNewFriendModal: React.FC<Props> = ({
         {searchError && <div className="text-red-500 text-sm mb-2">{searchError}</div>}
         <div>
           {newFriendSuggest ? (
-            <div className="p-3 rounded bg-gray-200 dark:bg-grday-700 hover:cursor-pointer">
+            <div
+              className="p-3 rounded bg-gray-200 dark:bg-grday-700 hover:cursor-pointer"
+              onClick={() => {
+                addFriend(newFriendSuggest._id);
+              }}
+            >
               <span className="font-bold text-gray-500">{newFriendSuggest.name}</span> <br />
               <span className="text-xs text-gray-500">ID: {newFriendSuggest.userId}</span>
             </div>

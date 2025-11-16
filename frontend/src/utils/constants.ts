@@ -12,6 +12,8 @@ export const CONSTANTS = {
       `${endpointBase}/accounts/search?searchText=${encodeURIComponent(searchText)}`,
     ACCOUNT_FIND_BY_ID: (userId: string) =>
       `${endpointBase}/accounts/${encodeURIComponent(userId)}`,
+    ACCOUNT_ADD_FRIEND: (accountId: string) =>
+      `${endpointBase}/accounts/add-friend/${encodeURIComponent(accountId)}`,
   },
   LINK: {
     SIGN_UP: `/sign-up`,

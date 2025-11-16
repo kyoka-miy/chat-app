@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import express from 'express';
-import { AccountController, UserIdDto, SearchAccountsDto } from '../controller/accountController';
+import { AccountController, UserIdDto } from '../controller/accountController';
 import { authenticateIdToken } from '../../middlewares/authenticateIdToken';
 import { container } from 'tsyringe';
 import { validateDto } from '../../middlewares/validateDto';
@@ -11,8 +11,9 @@ const accountController = container.resolve(AccountController);
 
 accountRouter.get('/me', authenticateIdToken, accountController.getAccount);
 accountRouter.get('/', authenticateIdToken, accountController.getAccounts);
+// body??
 accountRouter.post(
-  '/friends/:userId',
+  '/add-friend/:userId',
   authenticateIdToken,
   validateDto(UserIdDto),
   accountController.addFriend
