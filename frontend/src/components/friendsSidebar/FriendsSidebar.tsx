@@ -11,6 +11,7 @@ export const FriendsSidebar: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userIdInput, setUserIdInput] = useState('');
   const [newFriendSuggest, setNewFriendSuggest] = useState<Account | null>(null);
+  const [searchError, setSearchError] = useState<string | null>(null);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -23,17 +24,17 @@ export const FriendsSidebar: React.FC = () => {
     };
   }, [searchText]);
 
-  useEffect(() => {
+  const handleUserIdSearch = async () => {
     if (userIdInput.trim().length === 0) return;
-    const handler = setTimeout(() => {
-      useGet(CONSTANTS.ENDPOINT.ACCOUNT_FIND_BY_ID(userIdInput)).then((data) => {
-        setNewFriendSuggest(data);
-      });
-    }, 500);
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [userIdInput]);
+    const data = await useGet(CONSTANTS.ENDPOINT.ACCOUNT_FIND_BY_ID(userIdInput));
+    if (!data) {
+      setNewFriendSuggest(null);
+      setSearchError('The id does not exist or already in your friends.');
+    } else {
+      setNewFriendSuggest(data);
+      setSearchError(null);
+    }
+  };
 
   return (
     <aside className="w-56 bg-gray-100 dark:bg-gray-800 h-full p-4 flex flex-col gap-2 border-r">
@@ -102,8 +103,17 @@ export const FriendsSidebar: React.FC = () => {
               className="w-full px-3 py-2 rounded border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 mb-4"
               placeholder="Find a new friend by id..."
               value={userIdInput}
-              onChange={(e) => setUserIdInput(e.target.value)}
+              onChange={(e) => {
+                setUserIdInput(e.target.value);
+                setSearchError(null);
+              }}
+              onKeyDown={async (e) => {
+                if (e.key === 'Enter') {
+                  await handleUserIdSearch();
+                }
+              }}
             />
+            {searchError && <div className="text-red-500 text-sm mb-2">{searchError}</div>}
             <div>
               {newFriendSuggest ? (
                 <div className="p-3 rounded bg-gray-200 dark:bg-grday-700 hover:cursor-pointer">

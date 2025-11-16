@@ -11,7 +11,7 @@ import { ChatRoom, Message } from '@/utils/type';
 import { ChatMessages } from '@/components/ChatMessages';
 import { Sidebar } from '@/components/Sidebar';
 import { IconSidebar } from '@/components/IconSidebar';
-import { FriendsSidebar } from '@/components/FriendsSidebar';
+import { FriendsSidebar } from '@/components/friendsSidebar/FriendsSidebar';
 
 export default function Home() {
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
