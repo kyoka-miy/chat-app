@@ -1,4 +1,9 @@
+'use client';
+import { usePost } from '@/utils/api';
+import { CONSTANTS } from '@/utils/constants';
 import { Account } from '@/utils/type';
+import { on } from 'events';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   setIsModalOpen: (v: boolean) => void;
@@ -8,6 +13,7 @@ type Props = {
   handleUserIdSearch: () => Promise<void>;
   searchError: string | null;
   newFriendSuggest: Account | null;
+  setNewFriendSuggest: (v: Account | null) => void;
 };
 
 export const AddNewFriendModal: React.FC<Props> = ({
@@ -18,15 +24,23 @@ export const AddNewFriendModal: React.FC<Props> = ({
   handleUserIdSearch,
   searchError,
   newFriendSuggest,
+  setNewFriendSuggest,
 }) => {
-  const addFrield = async (friendId: string) => {
-    await fetch(`/api/accounts/add-friend/${friendId}`, {
-      method: 'POST',
-    });
+  const router = useRouter();
+
+  const onCloseModal = () => {
     setIsModalOpen(false);
     setUserIdInput('');
-    window.location.reload();
+    setNewFriendSuggest(null);
   };
+  const onAddFrield = async (friendId: string) => {
+    await usePost(CONSTANTS.ENDPOINT.ACCOUNT_ADD_FRIEND, { accountId: friendId });
+    setIsModalOpen(false);
+    setUserIdInput('');
+    setNewFriendSuggest(null);
+    router.refresh();
+  };
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
@@ -41,10 +55,7 @@ export const AddNewFriendModal: React.FC<Props> = ({
       >
         <button
           className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 hover:cursor-pointer"
-          onClick={() => {
-            setIsModalOpen(false);
-            setUserIdInput('');
-          }}
+          onClick={onCloseModal}
         >
           ×
         </button>
@@ -70,7 +81,7 @@ export const AddNewFriendModal: React.FC<Props> = ({
             <div
               className="p-3 rounded bg-gray-200 dark:bg-grday-700 hover:cursor-pointer"
               onClick={() => {
-                addFriend(newFriendSuggest._id);
+                onAddFrield(newFriendSuggest._id);
               }}
             >
               <span className="font-bold text-gray-500">{newFriendSuggest.name}</span> <br />

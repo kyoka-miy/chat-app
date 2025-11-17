@@ -12,14 +12,9 @@ export class AccountUseCase {
     return this.accountRepo.findAllExceptMe(myAccountId);
   }
 
-  async addFriendByUserId(myAccountId: ObjectId, userId: string) {
-    const friend = await this.accountRepo.findByUserId(userId);
-    if (!friend) {
-      throw new AppError('Account with the provided userId does not exist', 404);
-    }
-    if (friend._id.equals(myAccountId)) {
-      throw new AppError('Cannot add yourself as a friend', 400);
-    }
+  async addFriendByUserId(myAccountId: ObjectId, accountId: ObjectId) {
+    const friend = await this.accountRepo.findById(accountId);
+
     const myAccount = await this.accountRepo.findById(myAccountId);
     if (myAccount.friends?.some((f: any) => f._id.equals(friend._id))) {
       throw new AppError('This account is already your friend', 400);
@@ -40,7 +35,6 @@ export class AccountUseCase {
   }
 
   async searchAccountById(myAccountId: ObjectId, userId: string) {
-    console.log('Searching for userId:', userId);
     if (!userId || userId.length === 0) {
       return null;
     }

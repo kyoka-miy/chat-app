@@ -84,6 +84,7 @@ export const FriendsSidebar: React.FC = () => {
           handleUserIdSearch={handleUserIdSearch}
           searchError={searchError}
           newFriendSuggest={newFriendSuggest}
+          setNewFriendSuggest={setNewFriendSuggest}
         />
       )}
     </aside>
