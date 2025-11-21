@@ -6,6 +6,12 @@ import { AppError } from '../../utils/appError';
 
 @injectable()
 export class AccountRepository implements IAccountRepository {
+  async findFriendsByAccountId(accountId: ObjectId): Promise<ObjectId[]> {
+    const account = await Account.findById(accountId).populate('friends').exec();
+    if (!account) throw new AppError('Account not found', 404);
+    return account.friends;
+  }
+
   async findAllExceptMe(myAccountId: ObjectId): Promise<IAccount[]> {
     return Account.find({ _id: { $ne: myAccountId } }).exec();
   }

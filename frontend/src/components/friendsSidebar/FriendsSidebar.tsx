@@ -16,7 +16,7 @@ export const FriendsSidebar: React.FC = () => {
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      useGet(CONSTANTS.ENDPOINT.ACCOUNTS_SEARCH(searchText)).then((data) => {
+      useGet(CONSTANTS.ENDPOINT.ACCOUNTS_FRIENDS_SEARCH(searchText)).then((data) => {
         setFriends(data);
       });
     }, 500);

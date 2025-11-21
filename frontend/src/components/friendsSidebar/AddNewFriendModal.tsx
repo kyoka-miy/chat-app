@@ -34,7 +34,7 @@ export const AddNewFriendModal: React.FC<Props> = ({
     setNewFriendSuggest(null);
   };
   const onAddFrield = async (friendId: string) => {
-    await usePost(CONSTANTS.ENDPOINT.ACCOUNT_ADD_FRIEND, { accountId: friendId });
+    await usePost(CONSTANTS.ENDPOINT.ACCOUNTS_FRIENDS, { accountId: friendId });
     setIsModalOpen(false);
     setUserIdInput('');
     setNewFriendSuggest(null);

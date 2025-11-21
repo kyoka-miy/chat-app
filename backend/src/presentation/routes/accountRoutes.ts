@@ -11,14 +11,14 @@ const accountController = container.resolve(AccountController);
 
 accountRouter.get('/me', authenticateIdToken, accountController.getAccount);
 accountRouter.get('/', authenticateIdToken, accountController.getAccounts);
-// body??
+// accountRouter.get('/friends', authenticateIdToken, accountController.getFriends);
 accountRouter.post(
   '/friends',
   authenticateIdToken,
   validateDto(AccountIdDto),
   accountController.addFriend
 );
-accountRouter.get('/search', authenticateIdToken, accountController.searchAccountsBySearchText);
+accountRouter.get('/friends', authenticateIdToken, accountController.searchFriendsBySearchText);
 accountRouter.get(
   '/:userId',
   authenticateIdToken,

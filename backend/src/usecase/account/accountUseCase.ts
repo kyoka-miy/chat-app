@@ -3,6 +3,7 @@ import { TOKENS } from '../../config/tokens';
 import { IAccountRepository } from '../../repository/IAccountRepository';
 import { ObjectId } from 'mongodb';
 import { AppError } from '../../utils/appError';
+import { IAccount } from '../../domain/model/accountModel';
 
 @injectable()
 export class AccountUseCase {
@@ -22,15 +23,15 @@ export class AccountUseCase {
     this.accountRepo.addFriend(myAccountId, friend);
     return;
   }
-  //FIXME: Search from friends only, not all accounts
-  async searchAccounts(myAccountId: ObjectId, searchText: string) {
-    const allAccounts = await this.accountRepo.findAllExceptMe(myAccountId);
+
+  async searchFriends(myAccountId: ObjectId, searchText: string) {
+    const friendIds = await this.accountRepo.findFriendsByAccountId(myAccountId);
+    const friends = await this.accountRepo.findByIds(friendIds);
     const lowerSearchText = searchText.toLowerCase().trim();
-    return allAccounts.filter(
-      (account) =>
-        account.name.toLowerCase().includes(lowerSearchText) ||
-        // FIXME: once all userId filled, remove the check
-        (account.userId && account.userId.toLowerCase().includes(lowerSearchText))
+    return friends.filter(
+      (friend) =>
+        friend.name.toLowerCase().includes(lowerSearchText) ||
+        friend.userId.toLowerCase().includes(lowerSearchText)
     );
   }
 

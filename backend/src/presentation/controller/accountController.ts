@@ -28,29 +28,34 @@ export class AccountController {
     res.status(200).json(accounts);
   });
 
+  getFriends = catchAsync(async (req: Request, res: Response) => {
+    const account = req.account;
+    if (!account) {
+      throw new AppError('Account not found in session', 404);
+    }
+    const friends = account.friends || [];
+    res.status(200).json(friends);
+  });
+
   addFriend = catchAsync(async (req: Request, res: Response) => {
     const myAccountId = req.account?._id;
     if (!myAccountId) {
       throw new AppError('Account ID is not set in session', 404);
     }
     const accountId = req.body.accountId as ObjectId;
-    if (accountId.equals(myAccountId)) {
-      throw new AppError('Cannot add yourself as a friend', 400);
-    }
 
     await this.accountUsecase.addFriendByUserId(myAccountId, accountId);
     res.status(201).json({ message: 'Friend added successfully' });
   });
 
-  searchAccountsBySearchText = catchAsync(async (req: Request, res: Response) => {
-    const accountId = req.account?._id;
-    if (!accountId) {
-      res.status(400).json({ message: 'Account ID is not set in session' });
-      return;
+  searchFriendsBySearchText = catchAsync(async (req: Request, res: Response) => {
+    const myAccountId = req.account?._id;
+    if (!myAccountId) {
+      throw new AppError('Account ID is not set in session', 404);
     }
     const searchText = req.query.searchText as string;
 
-    const accounts = await this.accountUsecase.searchAccounts(accountId, searchText);
+    const accounts = await this.accountUsecase.searchFriends(myAccountId, searchText);
     res.status(200).json(accounts);
   });
 
