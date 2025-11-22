@@ -44,7 +44,7 @@ const LoginPage = () => {
           Login with Google
         </button>
         <p className="text-center text-gray-600 dark:text-gray-300 text-sm">
-          Don't have an account?{' '}
+          Don&apos;t have an account?{' '}
           <a href="/signup" className="text-blue-500 hover:underline">
             Sign up
           </a>
