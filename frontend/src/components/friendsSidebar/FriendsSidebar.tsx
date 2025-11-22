@@ -16,7 +16,7 @@ export const FriendsSidebar: React.FC = () => {
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      useGet(CONSTANTS.ENDPOINT.ACCOUNTS_FRIENDS_SEARCH(searchText)).then((data) => {
+      useGet(CONSTANTS.ENDPOINT.ACCOUNTS_FRIENDS_SEARCH(searchText)).then((data: Account[]) => {
         setFriends(data);
       });
     }, 500);
@@ -27,7 +27,7 @@ export const FriendsSidebar: React.FC = () => {
 
   const handleUserIdSearch = async () => {
     if (userIdInput.trim().length === 0) return;
-    const data = await useGet(CONSTANTS.ENDPOINT.ACCOUNT_FIND_BY_ID(userIdInput));
+    const data: Account | null = await useGet(CONSTANTS.ENDPOINT.ACCOUNT_FIND_BY_ID(userIdInput));
     if (!data) {
       setNewFriendSuggest(null);
       setSearchError('The id does not exist or already in your friends.');

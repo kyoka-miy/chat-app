@@ -22,7 +22,7 @@ export default function Home() {
 
   useEffect(() => {
     useGet(CONSTANTS.ENDPOINT.CHAT_ROOMS)
-      .then((data) => {
+      .then((data: ChatRoom[]) => {
         setChatRooms(data);
         if (data.length > 0) setCurrentChatRoomId(data[0]._id);
       })
@@ -35,13 +35,13 @@ export default function Home() {
       socket.emit('joinRoom', currentChatRoomId);
     }
     socket.off('message');
-    socket.on('newMessage', (msg: any) => {
+    socket.on('newMessage', (msg: Message) => {
       setMessages((prev) => ({
         ...prev,
         [currentChatRoomId]: [...(prev[currentChatRoomId] || []), msg],
       }));
     });
-    socket.on('joinRoom', (data: any) => {
+    socket.on('joinRoom', (data: { messages: Message[] }) => {
       setMessages((prev) => ({
         ...prev,
         [currentChatRoomId]: data.messages,

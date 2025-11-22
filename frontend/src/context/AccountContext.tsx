@@ -21,7 +21,7 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
   const [account, setAccount] = useState<Account | null>(null);
 
   useEffect(() => {
-    useGet(CONSTANTS.ENDPOINT.ACCOUNT_ME).then((data) => {
+    useGet(CONSTANTS.ENDPOINT.ACCOUNT_ME).then((data: Account) => {
       setAccount(data);
     });
   }, []);

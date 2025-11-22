@@ -1,6 +1,6 @@
 // FIXME: Add error handling
 
-export async function useGet(url: string) {
+export async function useGet<T = any>(url: string): Promise<T> {
   const res = await fetch(url, {
     credentials: 'include',
   });
@@ -8,7 +8,7 @@ export async function useGet(url: string) {
   return res.json();
 }
 
-export async function usePost(url: string, body: any) {
+export async function usePost<T = any, B = any>(url: string, body: B): Promise<T> {
   const res = await fetch(url, {
     method: 'POST',
     headers: {
@@ -21,7 +21,7 @@ export async function usePost(url: string, body: any) {
   return res.json();
 }
 
-export async function useDelete(url: string) {
+export async function useDelete<T = any>(url: string): Promise<T> {
   const res = await fetch(url, {
     method: 'DELETE',
     credentials: 'include',

@@ -2,7 +2,6 @@
 import { usePost } from '@/utils/api';
 import { CONSTANTS } from '@/utils/constants';
 import { Account } from '@/utils/type';
-import { on } from 'events';
 import { useRouter } from 'next/navigation';
 
 type Props = {
@@ -33,7 +32,7 @@ export const AddNewFriendModal: React.FC<Props> = ({
     setUserIdInput('');
     setNewFriendSuggest(null);
   };
-  const onAddFrield = async (friendId: string) => {
+  const onAddFriend = async (friendId: string) => {
     await usePost(CONSTANTS.ENDPOINT.ACCOUNTS_FRIENDS, { accountId: friendId });
     setIsModalOpen(false);
     setUserIdInput('');
@@ -81,7 +80,7 @@ export const AddNewFriendModal: React.FC<Props> = ({
             <div
               className="p-3 rounded bg-gray-200 dark:bg-grday-700 hover:cursor-pointer"
               onClick={() => {
-                onAddFrield(newFriendSuggest._id);
+                onAddFriend(newFriendSuggest._id);
               }}
             >
               <span className="font-bold text-gray-500">{newFriendSuggest.name}</span> <br />

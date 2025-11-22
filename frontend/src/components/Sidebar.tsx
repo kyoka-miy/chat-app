@@ -23,7 +23,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ rooms, currentRoomId, onSelect
 
   useEffect(() => {
     if (addModalOpen) {
-      useGet(CONSTANTS.ENDPOINT.ACCOUNTS).then((data) => {
+      useGet(CONSTANTS.ENDPOINT.ACCOUNTS).then((data: Account[]) => {
         setAccounts(data);
       });
     }
@@ -35,9 +35,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ rooms, currentRoomId, onSelect
     setDeleteModalOpen(true);
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (targetRoomId) {
-      useDelete(CONSTANTS.ENDPOINT.CHAT_ROOM(targetRoomId));
+      await useDelete(CONSTANTS.ENDPOINT.CHAT_ROOM(targetRoomId));
     }
     window.location.reload();
   };
