@@ -1,5 +1,5 @@
 'use client';
-import { usePost } from '@/utils/api';
+import { post } from '@/utils/api';
 import { CONSTANTS } from '@/utils/constants';
 import { Account } from '@/utils/type';
 import { useRouter } from 'next/navigation';
@@ -33,7 +33,7 @@ export const AddNewFriendModal: React.FC<Props> = ({
     setNewFriendSuggest(null);
   };
   const onAddFriend = async (friendId: string) => {
-    await usePost(CONSTANTS.ENDPOINT.ACCOUNTS_FRIENDS, { accountId: friendId });
+    await post(CONSTANTS.ENDPOINT.ACCOUNTS_FRIENDS, { accountId: friendId });
     setIsModalOpen(false);
     setUserIdInput('');
     setNewFriendSuggest(null);

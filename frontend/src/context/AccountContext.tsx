@@ -1,6 +1,6 @@
 'use client';
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useGet } from '../utils/api';
+import { get } from '../utils/api';
 import { Account } from '@/utils/type';
 import { CONSTANTS } from '@/utils/constants';
 
@@ -21,7 +21,7 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
   const [account, setAccount] = useState<Account | null>(null);
 
   useEffect(() => {
-    useGet(CONSTANTS.ENDPOINT.ACCOUNT_ME).then((data: Account) => {
+    get<Account>(CONSTANTS.ENDPOINT.ACCOUNT_ME).then((data) => {
       setAccount(data);
     });
   }, []);

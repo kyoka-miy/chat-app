@@ -1,4 +1,4 @@
-import { useDelete, useGet, usePost } from '@/utils/api';
+import { del, get, post } from '@/utils/api';
 import { CONSTANTS } from '@/utils/constants';
 import { Account, ChatRoom } from '@/utils/type';
 import React, { useEffect, useState } from 'react';
@@ -23,7 +23,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ rooms, currentRoomId, onSelect
 
   useEffect(() => {
     if (addModalOpen) {
-      useGet(CONSTANTS.ENDPOINT.ACCOUNTS).then((data: Account[]) => {
+      get<Account[]>(CONSTANTS.ENDPOINT.ACCOUNTS).then((data) => {
         setAccounts(data);
       });
     }
@@ -37,7 +37,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ rooms, currentRoomId, onSelect
 
   const handleConfirmDelete = async () => {
     if (targetRoomId) {
-      await useDelete(CONSTANTS.ENDPOINT.CHAT_ROOM(targetRoomId));
+      await del(CONSTANTS.ENDPOINT.CHAT_ROOM(targetRoomId));
     }
     window.location.reload();
   };
@@ -49,7 +49,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ rooms, currentRoomId, onSelect
   };
 
   const handleCreateRoom = async () => {
-    await usePost(CONSTANTS.ENDPOINT.CHAT_ROOMS, {
+    await post(CONSTANTS.ENDPOINT.CHAT_ROOMS, {
       name: newChatRoomName,
       accountIds: selectedAccounts,
     });

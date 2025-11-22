@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { MessageInput } from '../../components/MessageInput';
 import { getSocket } from '../../utils/socket';
-import { useGet, usePost } from '../../utils/api';
+import { get, post } from '../../utils/api';
 import { auth } from '@/utils/firebase';
 import { signOut } from 'firebase/auth';
 import { useAccount } from '@/context/AccountContext';
@@ -21,8 +21,8 @@ export default function Home() {
   const { account } = useAccount();
 
   useEffect(() => {
-    useGet(CONSTANTS.ENDPOINT.CHAT_ROOMS)
-      .then((data: ChatRoom[]) => {
+    get<ChatRoom[]>(CONSTANTS.ENDPOINT.CHAT_ROOMS)
+      .then((data) => {
         setChatRooms(data);
         if (data.length > 0) setCurrentChatRoomId(data[0]._id);
       })
@@ -63,7 +63,7 @@ export default function Home() {
 
   const handleLogout = async () => {
     await signOut(auth);
-    await usePost(CONSTANTS.ENDPOINT.AUTH_LOGOUT, {});
+    await post(CONSTANTS.ENDPOINT.AUTH_LOGOUT, {});
     window.location.href = CONSTANTS.LINK.LOGIN;
   };
 

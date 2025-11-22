@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAccount } from '@/context/AccountContext';
-import { useGet } from '@/utils/api';
+import { get } from '@/utils/api';
 import { CONSTANTS } from '@/utils/constants';
 import { Account } from '@/utils/type';
 import { AddNewFriendModal } from './AddNewFriendModal';
@@ -16,7 +16,7 @@ export const FriendsSidebar: React.FC = () => {
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      useGet(CONSTANTS.ENDPOINT.ACCOUNTS_FRIENDS_SEARCH(searchText)).then((data: Account[]) => {
+      get<Account[]>(CONSTANTS.ENDPOINT.ACCOUNTS_FRIENDS_SEARCH(searchText)).then((data) => {
         setFriends(data);
       });
     }, 500);
@@ -27,7 +27,9 @@ export const FriendsSidebar: React.FC = () => {
 
   const handleUserIdSearch = async () => {
     if (userIdInput.trim().length === 0) return;
-    const data: Account | null = await useGet(CONSTANTS.ENDPOINT.ACCOUNT_FIND_BY_ID(userIdInput));
+    const data: Account | null = await get<Account | null>(
+      CONSTANTS.ENDPOINT.ACCOUNT_FIND_BY_ID(userIdInput)
+    );
     if (!data) {
       setNewFriendSuggest(null);
       setSearchError('The id does not exist or already in your friends.');
