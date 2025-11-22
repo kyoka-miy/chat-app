@@ -50,3 +50,4 @@ frontend/public/
 public/
 
 backend/serviceAccountKey.json
+backend/dist/
