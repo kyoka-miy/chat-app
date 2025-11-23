@@ -4,7 +4,7 @@ import { CONSTANTS } from './utils/constants';
 
 // Redirect to login page if no valid tokens or session
 export async function middleware(request: NextRequest) {
-  const protectedPaths = [CONSTANTS.LINK.HOME];
+  // const protectedPaths = [CONSTANTS.LINK.HOME];
   const unprotectedPaths = [CONSTANTS.LINK.LOGIN, CONSTANTS.LINK.SIGN_UP];
   const { pathname } = request.nextUrl;
 
