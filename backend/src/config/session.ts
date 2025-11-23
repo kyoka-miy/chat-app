@@ -18,6 +18,7 @@ export function setupSession(app: any) {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       secure: process.env.NODE_ENV === 'production',
+      domain: process.env.NODE_ENV === 'production' ? '.chat-app-51gt.vercel.app' : undefined,
     },
   });
   app.use(sessionMiddleware);
