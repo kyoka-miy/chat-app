@@ -13,6 +13,7 @@ import messageRouter from './src/presentation/routes/messageRoutes';
 import authRouter from './src/presentation/routes/authRoutes';
 import { errorHandler } from './src/middlewares/errorHandler';
 import { AppError } from './src/utils/appError';
+import { Request, Response, NextFunction } from 'express';
 
 const server = http.createServer(app);
 const io = new SocketIOServer(server, {
@@ -40,7 +41,7 @@ mongoose.connect(DB).then(() => {
   app.use('/messages', messageRouter);
   app.use('/auth', authRouter);
 
-  app.use((req, res, next) => {
+  app.use((req: Request, res: Response, next: NextFunction) => {
     next(new AppError(`Route ${req.originalUrl} not found`, 404));
   });
   app.use(errorHandler);
