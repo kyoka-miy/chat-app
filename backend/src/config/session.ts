@@ -1,5 +1,4 @@
 import session from 'express-session';
-import mongoose from 'mongoose';
 import MongoStore from 'connect-mongo';
 
 export function setupSession(app: any) {
@@ -8,8 +7,11 @@ export function setupSession(app: any) {
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
-      client: mongoose.connection.getClient(),
-      dbName: mongoose.connection.db?.databaseName,
+      mongoUrl: process.env.DATABASE?.replace(
+        '<PASSWORD>',
+        process.env.DATABASE_PASSWORD as string
+      ),
+      //   dbName: mongoose.connection.db?.databaseName,
       collectionName: 'sessions',
     }),
     cookie: {
