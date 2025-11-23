@@ -51,3 +51,6 @@ public/
 
 backend/serviceAccountKey.json
 backend/dist/
+
+*.js
+*.js.map
