@@ -1,4 +1,4 @@
-const endpointBase = process.env.BACKEND_URL || 'http://localhost:3000';
+const endpointBase = process.env.NEXT_PUBLIC_BACKEND_URL;
 export const CONSTANTS = {
   ENDPOINT: {
     AUTH_SIGNUP: `${endpointBase}/auth/signup`,
