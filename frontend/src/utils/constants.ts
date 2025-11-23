@@ -1,4 +1,4 @@
-const endpointBase = process.env.REACT_APP_ENDPOINT_BASE || 'http://localhost:3000';
+const endpointBase = process.env.BACKEND_URL || 'http://localhost:3000';
 export const CONSTANTS = {
   ENDPOINT: {
     AUTH_SIGNUP: `${endpointBase}/auth/signup`,

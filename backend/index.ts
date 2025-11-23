@@ -17,15 +17,13 @@ import { AppError } from './src/utils/appError';
 const server = http.createServer(app);
 const io = new SocketIOServer(server, {
   cors: {
-    origin: 'http://localhost:3001',
+    origin: process.env.FRONTEND_URL,
     methods: ['GET', 'POST'],
     credentials: true,
   },
 });
 
 setupSocket(io);
-
-dotenv.config({ path: './config.env' });
 
 if (!process.env.DATABASE || !process.env.DATABASE_PASSWORD) {
   throw new Error('Database environment variable is not defined.');
@@ -54,6 +52,7 @@ mongoose.connect(DB).then(() => {
 
   const PORT = process.env.PORT || 3000;
   server.listen(PORT, () => {
-    console.log(`Server is running at http://localhost:${PORT}`);
+    const url = process.env.BACKEND_URL;
+    console.log(`Server is running at ${url}`);
   });
 });
