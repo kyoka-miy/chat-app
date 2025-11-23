@@ -3,7 +3,7 @@ import MongoStore from 'connect-mongo';
 
 export function setupSession(app: any) {
   const sessionMiddleware = session({
-    secret: process.env.SESSION_SECRET || 'dev_secret_key',
+    secret: process.env.SESSION_SECRET as string,
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
@@ -16,7 +16,7 @@ export function setupSession(app: any) {
     cookie: {
       httpOnly: true,
       maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
-      sameSite: 'lax',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       secure: process.env.NODE_ENV === 'production',
     },
   });
