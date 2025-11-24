@@ -4,7 +4,7 @@ import { CONSTANTS } from './utils/constants';
 
 // Redirect to login page if no valid tokens or session
 export async function middleware(request: NextRequest) {
-  // const protectedPaths = [CONSTANTS.LINK.HOME];
+  const protectedPaths = [CONSTANTS.LINK.HOME];
   const unprotectedPaths = [CONSTANTS.LINK.LOGIN, CONSTANTS.LINK.SIGN_UP];
   const { pathname } = request.nextUrl;
 
@@ -23,14 +23,12 @@ export async function middleware(request: NextRequest) {
 
   // If the user is trying to access a protected path (home),
   // and they do not have valid refresh token, redirect them to the login page.
-  // if (protectedPaths.some((path) => pathname.startsWith(path))) {
-  //   console.log("redirecting check:");
-  //   console.log(idTokenFromCookie, refreshTokenFromCookie, session);
-  //   if (!refreshTokenFromCookie || !session) {
-  //     const loginUrl = new URL(CONSTANTS.LINK.LOGIN, request.url);
-  //     return NextResponse.redirect(loginUrl);
-  //   }
-  // }
+  if (protectedPaths.some((path) => pathname.startsWith(path))) {
+    if (!refreshTokenFromCookie || !session) {
+      const loginUrl = new URL(CONSTANTS.LINK.LOGIN, request.url);
+      return NextResponse.redirect(loginUrl);
+    }
+  }
   return NextResponse.next();
 }
 
