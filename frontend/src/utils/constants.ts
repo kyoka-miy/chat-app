@@ -1,4 +1,5 @@
-const endpointBase = process.env.NEXT_PUBLIC_BACKEND_URL;
+const isProd = process.env.NODE_ENV === 'production';
+const endpointBase = isProd ? '/api' : process.env.NEXT_PUBLIC_BACKEND_URL;
 export const CONSTANTS = {
   ENDPOINT: {
     AUTH_SIGNUP: `${endpointBase}/auth/signup`,
