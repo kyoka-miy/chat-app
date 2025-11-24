@@ -115,7 +115,6 @@ export class AuthController {
     if (req.session) {
       req.session.account = account;
       console.log("Session after setting:", req.session);
-      console.log("Account set in session:", req.session.account);
     }
   }
 }
