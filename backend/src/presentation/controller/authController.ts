@@ -111,10 +111,11 @@ export class AuthController {
     });
 
     // Store account info in session
-    console.log("Setting session account:", account);
     console.log("Session before setting:", req.session);
     if (req.session) {
       req.session.account = account;
+      console.log("Session after setting:", req.session);
+      console.log("Account set in session:", req.session.account);
     }
   }
 }
