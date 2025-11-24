@@ -102,7 +102,6 @@ export class AuthController {
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     });
 
-    // Set refreshToken in httpOnly cookie if present in request
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -110,11 +109,8 @@ export class AuthController {
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     });
 
-    // Store account info in session
-    console.log("Session before setting:", req.session);
     if (req.session) {
       req.session.account = account;
-      console.log("Session after setting:", req.session);
     }
   }
 }

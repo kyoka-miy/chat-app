@@ -32,10 +32,9 @@ const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSW
 
 mongoose.connect(DB).then(() => {
   console.log('DB connection successful!');
-  const sessionMiddleware = setupSession(app); // Get session middleware instance
-
-  // Register routes after session middleware
-  app.use(sessionMiddleware); // <--- 追加: すべてのリクエストでセッションを有効化
+  const sessionMiddleware = setupSession(app);
+  app.use(sessionMiddleware);
+  
   app.use('/accounts', accountRouter);
   app.use('/chat-rooms', chatRoomRouter);
   app.use('/messages', messageRouter);
