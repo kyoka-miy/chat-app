@@ -4,7 +4,6 @@ import { Server as SocketIOServer } from 'socket.io';
 import http from 'http';
 import { setupSocket } from './src/presentation/socket/socket';
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
 import app from './src/app';
 import { setupSession } from './src/config/session';
 import accountRouter from './src/presentation/routes/accountRoutes';
@@ -36,6 +35,7 @@ mongoose.connect(DB).then(() => {
   const sessionMiddleware = setupSession(app); // Get session middleware instance
 
   // Register routes after session middleware
+  app.use(sessionMiddleware); // <--- 追加: すべてのリクエストでセッションを有効化
   app.use('/accounts', accountRouter);
   app.use('/chat-rooms', chatRoomRouter);
   app.use('/messages', messageRouter);
