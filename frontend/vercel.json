@@ -1,5 +1,5 @@
 {
   "rewrites": [
-    { "source": "/api/:path*", "destination": "https://chat-app-fy1c.onrender.com/api/:path*" }
+    { "source": "/api/:path*", "destination": "https://chat-app-fy1c.onrender.com/:path*" }
   ]
 }
