@@ -50,7 +50,10 @@ const accountSchema = new mongoose.Schema({
 });
 
 accountSchema.pre('save', function (next) {
-  if (!this.userId && this._id) {
+  if (!this._id) {
+    this._id = new mongoose.Types.ObjectId();
+  }
+  if (!this.userId) {
     this.userId = this._id.toString();
   }
   next();
