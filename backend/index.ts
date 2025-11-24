@@ -34,7 +34,7 @@ mongoose.connect(DB).then(() => {
   console.log('DB connection successful!');
   const sessionMiddleware = setupSession(app);
   app.use(sessionMiddleware);
-  
+
   app.use('/accounts', accountRouter);
   app.use('/chat-rooms', chatRoomRouter);
   app.use('/messages', messageRouter);

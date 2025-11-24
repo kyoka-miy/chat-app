@@ -3,27 +3,26 @@ import { CONSTANTS } from '@/utils/constants';
 import { Account, ChatRoom } from '@/utils/type';
 import React, { useEffect, useState } from 'react';
 
-type SidebarProps = {
+type Props = {
   rooms: ChatRoom[];
   currentRoomId: string;
   onSelectRoom: (roomId: string) => void;
 };
 
-export const Sidebar: React.FC<SidebarProps> = ({ rooms, currentRoomId, onSelectRoom }) => {
+export const ChatRoomsSidebar: React.FC<Props> = ({ rooms, currentRoomId, onSelectRoom }) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [targetRoomId, setTargetRoomId] = useState<string | null>(null);
   const [targetRoomName, setTargetRoomName] = useState<string>('');
 
   const [addModalOpen, setAddModalOpen] = useState(false);
 
-  // Modal state for new chat room
   const [newChatRoomName, setNewChatRoomName] = useState('');
   const [selectedAccounts, setSelectedAccounts] = useState<string[]>([]);
   const [accounts, setAccounts] = useState<Account[]>([]);
 
   useEffect(() => {
     if (addModalOpen) {
-      get<Account[]>(CONSTANTS.ENDPOINT.ACCOUNTS).then((data) => {
+      get<Account[]>(CONSTANTS.ENDPOINT.ACCOUNTS_FRIENDS).then((data) => {
         setAccounts(data);
       });
     }

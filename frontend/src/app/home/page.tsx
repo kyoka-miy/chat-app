@@ -9,7 +9,7 @@ import { useAccount } from '@/context/AccountContext';
 import { CONSTANTS } from '@/utils/constants';
 import { ChatRoom, Message } from '@/utils/type';
 import { ChatMessages } from '@/components/ChatMessages';
-import { Sidebar } from '@/components/Sidebar';
+import { ChatRoomsSidebar } from '@/components/chatRoomsSidebar/ChatRoomsSidebar';
 import { IconSidebar } from '@/components/IconSidebar';
 import { FriendsSidebar } from '@/components/friendsSidebar/FriendsSidebar';
 
@@ -71,7 +71,7 @@ export default function Home() {
     <div className="flex h-screen">
       <IconSidebar selected={sidebarType} onSelect={setSidebarType} />
       {sidebarType === 'chat' ? (
-        <Sidebar
+        <ChatRoomsSidebar
           rooms={chatRooms}
           currentRoomId={currentChatRoomId}
           onSelectRoom={setCurrentChatRoomId}
