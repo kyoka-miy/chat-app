@@ -3,7 +3,7 @@ import { autoInjectable } from 'tsyringe';
 import { catchAsync } from '../../middlewares/catchAsync';
 import { AccountUseCase } from '../../usecase/account/accountUseCase';
 import { AppError } from '../../utils/appError';
-import { IsString } from 'class-validator';
+import { IsString, Length } from 'class-validator';
 import { ValidObjectId } from '../../validators/validObjectId';
 import { ObjectId } from 'mongodb';
 
@@ -62,12 +62,20 @@ export class AccountController {
   findAccountByUserId = catchAsync(async (req: Request, res: Response) => {
     const accountId = req.account?._id;
     if (!accountId) {
-      res.status(400).json({ message: 'Account ID is not set in session' });
-      return;
+      throw new AppError('Account ID is not set in session', 404);
     }
-
     const accounts = await this.accountUsecase.searchAccountById(accountId, req.params.userId);
     res.status(200).json(accounts);
+  });
+
+  updateUserIdAndName = catchAsync(async (req: Request, res: Response) => {
+    const accountId = req.account?._id;
+    if (!accountId) {
+      throw new AppError('Account ID is not set in session', 404);
+    }
+    const { userId, name } = req.body;
+    await this.accountUsecase.updateUserIdAndName(accountId, userId, name);
+    res.status(200).json({ message: 'Account updated successfully' });
   });
 }
 
@@ -83,5 +91,15 @@ export class SearchAccountsDto {
 
 export class UserIdDto {
   @IsString()
+  @Length(1, 100, { message: 'User ID must be 1-100 characters' })
   userId!: string;
+}
+
+export class UserIdAndNameDto {
+  @IsString()
+  @Length(1, 100, { message: 'User ID must be 1-100 characters' })
+  userId!: string;
+  @IsString()
+  @Length(1, 100, { message: 'Name must be 1-100 characters' })
+  name!: string;
 }

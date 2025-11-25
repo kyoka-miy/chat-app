@@ -11,4 +11,5 @@ export interface IAccountRepository {
   addFriend(myAccountId: ObjectId, friend: IAccount): Promise<void>;
   findByUserIdExceptMeAndFriends(myAccountId: ObjectId, userId: string): Promise<IAccount | null>;
   findFriendsByAccountId(accountId: ObjectId): Promise<ObjectId[]>;
+  update(account: IAccount): Promise<void>;
 }

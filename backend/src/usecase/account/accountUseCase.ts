@@ -41,4 +41,12 @@ export class AccountUseCase {
     }
     return this.accountRepo.findByUserIdExceptMeAndFriends(myAccountId, userId.trim());
   }
+
+  async updateUserIdAndName(accountId: ObjectId, userId: string, name: string) {
+    const account = await this.accountRepo.findById(accountId);
+    account.userId = userId;
+    account.name = name;
+    await this.accountRepo.update(account);
+    return;
+  }
 }

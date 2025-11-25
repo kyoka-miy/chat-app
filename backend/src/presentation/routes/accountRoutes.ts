@@ -1,6 +1,11 @@
 import 'reflect-metadata';
 import express from 'express';
-import { AccountController, AccountIdDto, UserIdDto } from '../controller/accountController';
+import {
+  AccountController,
+  AccountIdDto,
+  UserIdAndNameDto,
+  UserIdDto,
+} from '../controller/accountController';
 import { authenticateIdToken } from '../../middlewares/authenticateIdToken';
 import { container } from 'tsyringe';
 import { validateDto } from '../../middlewares/validateDto';
@@ -11,7 +16,12 @@ const accountController = container.resolve(AccountController);
 
 accountRouter.get('/me', authenticateIdToken, accountController.getAccount);
 accountRouter.get('/', authenticateIdToken, accountController.getAccounts);
-// accountRouter.get('/friends', authenticateIdToken, accountController.getFriends);
+accountRouter.put(
+  '/',
+  authenticateIdToken,
+  validateDto(UserIdAndNameDto),
+  accountController.updateUserIdAndName
+);
 accountRouter.post(
   '/friends',
   authenticateIdToken,

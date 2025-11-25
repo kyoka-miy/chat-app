@@ -57,4 +57,8 @@ export class AccountRepository implements IAccountRepository {
       _id: { $ne: myAccountId, $nin: friendIds },
     }).exec();
   }
+
+  async update(account: IAccount): Promise<void> {
+    await Account.updateOne({ _id: account._id }, account).exec();
+  }
 }
