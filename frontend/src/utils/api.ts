@@ -21,6 +21,19 @@ export async function post<T = unknown, B = unknown>(url: string, body: B): Prom
   return res.json();
 }
 
+export async function put<T = unknown, B = unknown>(url: string, body: B): Promise<T> {
+  const res = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error('Failed to put data');
+  return res.json();
+}
+
 export async function del<T = unknown>(url: string): Promise<T> {
   const res = await fetch(url, {
     method: 'DELETE',

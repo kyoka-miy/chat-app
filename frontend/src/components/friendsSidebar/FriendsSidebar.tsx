@@ -13,6 +13,11 @@ export const FriendsSidebar: React.FC = () => {
   const [userIdInput, setUserIdInput] = useState('');
   const [newFriendSuggest, setNewFriendSuggest] = useState<Account | null>(null);
   const [searchError, setSearchError] = useState<string | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedName, setEditedName] = useState(account?.name || '');
+  const [editedUserId, setEditedUserId] = useState(account?.userId || '');
+
+  const popupRef = React.useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -24,6 +29,24 @@ export const FriendsSidebar: React.FC = () => {
       clearTimeout(handler);
     };
   }, [searchText]);
+
+  useEffect(() => {
+    setEditedName(account?.name || '');
+    setEditedUserId(account?.userId || '');
+  }, [account]);
+
+  useEffect(() => {
+    if (!isEditing) return;
+    const handleClickOutside = (event: MouseEvent) => {
+      if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+        setIsEditing(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isEditing]);
 
   const handleUserIdSearch = async () => {
     if (userIdInput.trim().length === 0) return;
@@ -39,16 +62,76 @@ export const FriendsSidebar: React.FC = () => {
     }
   };
 
+  const handleSave = () => {
+    // TODO: Implement save logic (API call etc.)
+    setIsEditing(false);
+  };
+
   return (
     <aside className="w-56 bg-gray-100 dark:bg-gray-800 h-full p-4 flex flex-col gap-2 border-r">
-      <div className="flex flex-col items-center mb-4 gap-2">
+      <div className="flex flex-col items-center mb-4 gap-2 relative w-full">
+        <div className="absolute top-0 right-0">
+          <button
+            className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
+            onClick={() => setIsEditing(true)}
+            aria-label="Edit profile"
+          >
+            <span role="img" aria-label="edit">
+              ✏️
+            </span>
+          </button>
+          {isEditing && (
+            <div
+              ref={popupRef}
+              className="absolute top-0 left-full ml-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded shadow-xl p-4 z-10 w-56 flex flex-col gap-2"
+            >
+              <div className="font-bold text-center mb-2">Edit Profile</div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-sm w-14">Name</span>
+                <input
+                  type="text"
+                  className="w-full px-3 py-2 rounded border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900"
+                  value={editedName}
+                  onChange={(e) => setEditedName(e.target.value)}
+                  placeholder="Name"
+                />
+              </div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-sm w-14">ID</span>
+                <input
+                  type="text"
+                  className="w-full px-3 py-2 rounded border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900"
+                  value={editedUserId}
+                  onChange={(e) => setEditedUserId(e.target.value)}
+                  placeholder="User ID"
+                />
+              </div>
+              <div className="flex gap-2 mt-2">
+                <button
+                  className="px-3 py-1 rounded bg-blue-500 text-white hover:bg-blue-600 w-full cursor-pointer"
+                  onClick={handleSave}
+                >
+                  Save
+                </button>
+                <button
+                  className="px-3 py-1 rounded bg-gray-400 text-white hover:bg-gray-500 w-full cursor-pointer"
+                  onClick={() => setIsEditing(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
         <div className="w-16 h-16 rounded-full bg-gray-300 flex items-center justify-center text-3xl">
-          {/* TODO: Replace with actual user icon */}
           <span role="img" aria-label="user">
             👤
           </span>
         </div>
-        <span className="font-bold">{account?.name}</span>
+        <div className="flex flex-col items-center gap-1">
+          <span className="font-bold">{account?.name}</span>
+          <span className="text-xs text-gray-500">ID: {account?.userId}</span>
+        </div>
       </div>
       <div className="mb-2">
         <input
