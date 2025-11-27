@@ -8,6 +8,11 @@ import { AppError } from '../../utils/appError';
 export class AccountUseCase {
   constructor(@inject(TOKENS.AccountRepository) private accountRepo: IAccountRepository) {}
 
+  async getMyAccount(myAccountId: ObjectId) {
+    const account = await this.accountRepo.findById(myAccountId);
+    return account;
+  }
+
   async getAccounts(myAccountId: ObjectId) {
     return this.accountRepo.findAllExceptMe(myAccountId);
   }

@@ -11,11 +11,14 @@ import { AccountUseCase } from '../../usecase/account/accountUsecase';
 export class AccountController {
   constructor(private accountUsecase: AccountUseCase) {}
 
-  getAccount = catchAsync(async (req: Request, res: Response) => {
-    const account = req.account;
-    if (!account) {
-      throw new AppError('Account not found in session', 404);
+  getMeAccount = catchAsync(async (req: Request, res: Response) => {
+    console.log('getMeAccount called');
+    const accountId = req.account?._id;
+    if (!accountId) {
+      throw new AppError('Account ID is not set in session', 404);
     }
+    const account = await this.accountUsecase.getMyAccount(accountId);
+    console.log('Retrieved account:', account);
     res.status(200).json(account);
   });
 

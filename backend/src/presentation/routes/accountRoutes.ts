@@ -14,7 +14,7 @@ const accountRouter = express.Router();
 
 const accountController = container.resolve(AccountController);
 
-accountRouter.get('/me', authenticateIdToken, accountController.getAccount);
+accountRouter.get('/me', authenticateIdToken, accountController.getMeAccount);
 accountRouter.get('/', authenticateIdToken, accountController.getAccounts);
 
 accountRouter.post(
