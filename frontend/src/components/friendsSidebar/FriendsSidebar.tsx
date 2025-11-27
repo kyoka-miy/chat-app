@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useAccount } from '@/context/AccountContext';
-import { get } from '@/utils/api';
+import { get, put } from '@/utils/api';
 import { CONSTANTS } from '@/utils/constants';
 import { Account } from '@/utils/type';
 import { AddNewFriendModal } from './AddNewFriendModal';
+import { useRouter } from 'next/navigation';
 
 export const FriendsSidebar: React.FC = () => {
   const { account } = useAccount();
+  const router = useRouter();
   const [searchText, setSearchText] = useState('');
   const [friends, setFriends] = useState<Account[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -62,9 +64,13 @@ export const FriendsSidebar: React.FC = () => {
     }
   };
 
-  const handleSave = () => {
-    // TODO: Implement save logic (API call etc.)
+  const handleSave = async () => {
+    await put(CONSTANTS.ENDPOINT.ACCOUNTS, {
+      name: editedName,
+      userId: editedUserId,
+    });
     setIsEditing(false);
+    router.refresh();
   };
 
   return (
@@ -83,7 +89,7 @@ export const FriendsSidebar: React.FC = () => {
           {isEditing && (
             <div
               ref={popupRef}
-              className="absolute top-0 left-full ml-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded shadow-xl p-4 z-10 w-56 flex flex-col gap-2"
+              className="absolute top-0 left-full ml-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded shadow-xl p-4 z-10 w-76 flex flex-col gap-2"
             >
               <div className="font-bold text-center mb-2">Edit Profile</div>
               <div className="flex items-center gap-2 mb-1">

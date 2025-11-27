@@ -16,12 +16,7 @@ const accountController = container.resolve(AccountController);
 
 accountRouter.get('/me', authenticateIdToken, accountController.getAccount);
 accountRouter.get('/', authenticateIdToken, accountController.getAccounts);
-accountRouter.put(
-  '/',
-  authenticateIdToken,
-  validateDto(UserIdAndNameDto),
-  accountController.updateUserIdAndName
-);
+
 accountRouter.post(
   '/friends',
   authenticateIdToken,
@@ -34,6 +29,12 @@ accountRouter.get(
   authenticateIdToken,
   validateDto(UserIdDto),
   accountController.findAccountByUserId
+);
+accountRouter.put(
+  '/',
+  authenticateIdToken,
+  validateDto(UserIdAndNameDto),
+  accountController.updateUserIdAndName
 );
 
 export default accountRouter;
