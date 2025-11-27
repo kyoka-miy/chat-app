@@ -3,7 +3,6 @@ import { TOKENS } from '../../config/tokens';
 import { IAccountRepository } from '../../repository/IAccountRepository';
 import { ObjectId } from 'mongodb';
 import { AppError } from '../../utils/appError';
-import { IAccount } from '../../domain/model/accountModel';
 
 @injectable()
 export class AccountUseCase {

@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import { autoInjectable } from 'tsyringe';
 import { catchAsync } from '../../middlewares/catchAsync';
-import { AccountUseCase } from '../../usecase/account/accountUseCase';
 import { AppError } from '../../utils/appError';
 import { IsString, Length } from 'class-validator';
 import { ValidObjectId } from '../../validators/validObjectId';
 import { ObjectId } from 'mongodb';
+import { AccountUseCase } from '../../usecase/account/accountUsecase';
 
 @autoInjectable()
 export class AccountController {
