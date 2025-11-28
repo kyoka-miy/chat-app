@@ -33,5 +33,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [CONSTANTS.LINK.HOME, CONSTANTS.LINK.LOGIN, CONSTANTS.LINK.SIGN_UP],
+  matcher: ['/home', '/login', '/signup'], // <-- must be static
 };

@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config({ path: require('path').resolve(process.cwd(), 'config.env') });
+
 import 'reflect-metadata';
 import './src/config/container';
 import { Server as SocketIOServer } from 'socket.io';
