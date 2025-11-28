@@ -31,7 +31,7 @@ export class AccountUseCase {
   async searchFriends(myAccountId: ObjectId, searchText: string) {
     const friendIds = await this.accountRepo.findFriendsByAccountId(myAccountId);
     const friends = await this.accountRepo.findByIds(friendIds);
-    const lowerSearchText = searchText.toLowerCase().trim();
+    const lowerSearchText = searchText ? searchText.toLowerCase().trim() : '';
     return friends.filter(
       (friend) =>
         friend.name.toLowerCase().includes(lowerSearchText) ||
