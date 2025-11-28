@@ -18,6 +18,11 @@ export class AddChatRoomUseCase {
     if (accounts.length !== accountIds.length) {
       throw new AppError('Some accountIds do not exist or contain duplicates', 400);
     }
-    this.chatRoomRepo.addChatRooms(name, accountIds);
+    const newChatRoom = await this.chatRoomRepo.addChatRooms(name, accountIds);
+    for (const account of accounts) {
+      account.chatRooms = account.chatRooms || [];
+      account.chatRooms.push(newChatRoom._id);
+      await this.accountRepo.update(account);
+    }
   }
 }

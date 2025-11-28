@@ -14,13 +14,13 @@ export class ChatRoomRepository implements IChatRoomRepository {
       .exec();
   }
 
-  async addChatRooms(name: string, accountIds: ObjectId[]): Promise<void> {
+  async addChatRooms(name: string, accountIds: ObjectId[]): Promise<IChatRoom> {
     const chatRoom = new ChatRoom({
       name,
       createdDateTime: new Date(),
       accounts: accountIds,
     });
-    await chatRoom.save();
+    return await chatRoom.save();
   }
 
   async deleteById(chatRoomId: ObjectId): Promise<void> {
