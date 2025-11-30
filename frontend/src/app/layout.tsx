@@ -4,6 +4,7 @@ import './globals.css';
 import { AccountProvider } from '../context/AccountContext';
 import { usePathname } from 'next/navigation';
 import { CONSTANTS } from '@/utils/constants';
+import { Toaster } from 'react-hot-toast';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -25,6 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <Toaster />
         {isAuthPage ? children : <AccountProvider>{children}</AccountProvider>}
       </body>
     </html>
