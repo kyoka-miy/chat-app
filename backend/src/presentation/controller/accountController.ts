@@ -31,15 +31,6 @@ export class AccountController {
     res.status(200).json(accounts);
   });
 
-  // getFriends = catchAsync(async (req: Request, res: Response) => {
-  //   const account = req.account;
-  //   if (!account) {
-  //     throw new AppError('Account not found in session', 404);
-  //   }
-  //   const friends = account.friends || [];
-  //   res.status(200).json(friends);
-  // });
-
   addFriend = catchAsync(async (req: Request, res: Response) => {
     const myAccountId = req.account?._id;
     if (!myAccountId) {

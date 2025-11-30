@@ -47,6 +47,10 @@ export class AccountUseCase {
   }
 
   async updateUserIdAndName(accountId: ObjectId, userId: string, name: string) {
+    const existingAccount = await this.accountRepo.findByUserId(userId);
+    if (existingAccount && !existingAccount._id.equals(accountId)) {
+      throw new AppError('This userId is already taken', 400);
+    }
     const account = await this.accountRepo.findById(accountId);
     account.userId = userId;
     account.name = name;
