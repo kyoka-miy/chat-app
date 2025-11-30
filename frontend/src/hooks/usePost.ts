@@ -9,7 +9,7 @@ export const usePost = () => {
     setErrorMessage('');
 
     try {
-      await fetch(url, {
+      const res = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -17,8 +17,12 @@ export const usePost = () => {
         credentials: 'include',
         body: JSON.stringify(body),
       });
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || 'Failed to post data');
+      }
     } catch (err: any) {
-      setErrorMessage(err.message || 'Failed to post data');
+      setErrorMessage(err.message);
     } finally {
       setIsLoading(false);
     }
