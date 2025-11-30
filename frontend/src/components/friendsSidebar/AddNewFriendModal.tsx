@@ -1,8 +1,10 @@
 'use client';
-import { post } from '@/utils/api';
+import { usePost } from '@/hooks/usePost';
 import { CONSTANTS } from '@/utils/constants';
 import { Account } from '@/utils/type';
 import { useRouter } from 'next/navigation';
+import { ErrorMessage } from '../common/ErrorMessage';
+import { error } from 'console';
 
 type Props = {
   setIsModalOpen: (v: boolean) => void;
@@ -26,6 +28,7 @@ export const AddNewFriendModal: React.FC<Props> = ({
   setNewFriendSuggest,
 }) => {
   const router = useRouter();
+  const { post, errorMessage } = usePost();
 
   const onCloseModal = () => {
     setIsModalOpen(false);
@@ -74,7 +77,8 @@ export const AddNewFriendModal: React.FC<Props> = ({
             }
           }}
         />
-        {searchError && <div className="text-red-500 text-sm mb-2">{searchError}</div>}
+        {searchError && <ErrorMessage errorMessage={searchError} />}
+        {errorMessage && <ErrorMessage errorMessage={errorMessage} />}
         <div>
           {newFriendSuggest ? (
             <div
