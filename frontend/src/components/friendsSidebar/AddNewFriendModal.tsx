@@ -4,7 +4,6 @@ import { CONSTANTS } from '@/utils/constants';
 import { Account } from '@/utils/type';
 import { useRouter } from 'next/navigation';
 import { ErrorMessage } from '../common/ErrorMessage';
-import { error } from 'console';
 
 type Props = {
   setIsModalOpen: (v: boolean) => void;
