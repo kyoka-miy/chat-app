@@ -1,11 +1,11 @@
 # Chat App
 
-This is a chat application built using Next.js, TypeScript, and Tailwind CSS. It provides features such as chat rooms, a sidebar for navigation, message sending.
+This is a chat application built using Express, TypeScript, and Next.js. It provides features such as real-time chat, adding friends and login/sign up.
 
 ## Technologies Used
 
 - **Frontend**: Next.js, TypeScript, Tailwind CSS
-- **Backend**: Node.js, TypeScript, MongoDB, Firebase Admin SDK
+- **Backend**: Node.js, Express, TypeScript, MongoDB, Socket.io, Firebase Admin SDK
 
 ## Deployed URL
 
