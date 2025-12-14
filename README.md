@@ -2,6 +2,25 @@
 
 This is a chat application built using Express, TypeScript, and Next.js. It provides features such as real-time chat, adding friends and login/sign up.
 
+<table>
+  <tr>
+    <td>
+      <img src="https://github.com/user-attachments/assets/fd7439c6-5447-4831-a34f-3f2be0774076"/>
+    </td>
+    <td>
+      <img src="https://github.com/user-attachments/assets/20071445-9aa0-45fc-8a81-e015717b7cfe"/>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="https://github.com/user-attachments/assets/a4aa2f36-1cd2-483e-bfd1-ac20f10d265c"/>
+    </td>
+    <td>
+      <img src="https://github.com/user-attachments/assets/5860a819-7765-4c50-bc70-c437795c95b5"/>
+    </td>
+  </tr>
+</table>
+
 ## Technologies Used
 
 - **Frontend**: Next.js, TypeScript, Tailwind CSS
@@ -16,7 +35,7 @@ The application is deployed at: [https://chat-app-51gt.vercel.app/home](https://
 1. Clone the repository:
 
    ```bash
-   git clone <repository-url>
+   git clone [<repository-url>](https://github.com/kyoka-miy/chat-app.git)
    ```
 
 2. Navigate to the project directory:
